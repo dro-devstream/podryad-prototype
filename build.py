@@ -1,6 +1,6 @@
 """Собирает prototype/index.html: вставляет иллюстрации и аватары как data URI.
 
-Запуск: python3 -I build.py  (из папки prototype)
+Запуск: python3 -I build.py [имя]  (из папки prototype; имя шаблона src/<имя>.template.html, по умолчанию index)
 Аватары кешируются в src/avatars/, иллюстрации берутся из ../design/img/.
 """
 import base64
@@ -47,15 +47,16 @@ def avatar(key: str) -> bytes:
 
 
 def main() -> None:
-    html = (ROOT / 'src' / 'index.template.html').read_text(encoding='utf-8')
+    name = sys.argv[1] if len(sys.argv) > 1 else 'index'
+    html = (ROOT / 'src' / f'{name}.template.html').read_text(encoding='utf-8')
     html = re.sub(r'__IMG_([a-z-]+)__',
                   lambda m: data_uri((IMG_DIR / f'{m.group(1)}.svg').read_bytes()), html)
     html = re.sub(r'__AV_([a-z_]+)__', lambda m: data_uri(avatar(m.group(1))), html)
     left = re.findall(r'__(?:IMG|AV)_[a-z_-]+__', html)
     if left:
         sys.exit(f'unresolved: {left}')
-    (ROOT / 'index.html').write_text(html, encoding='utf-8')
-    print(f'index.html: {len(html.encode()) // 1024} KB')
+    (ROOT / f'{name}.html').write_text(html, encoding='utf-8')
+    print(f'{name}.html: {len(html.encode()) // 1024} KB')
 
 
 if __name__ == '__main__':
