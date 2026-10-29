@@ -52,7 +52,10 @@ def main() -> None:
     html = re.sub(r'__IMG_([a-z-]+)__',
                   lambda m: data_uri((IMG_DIR / f'{m.group(1)}.svg').read_bytes()), html)
     html = re.sub(r'__AV_([a-z_]+)__', lambda m: data_uri(avatar(m.group(1))), html)
-    left = re.findall(r'__(?:IMG|AV)_[a-z_-]+__', html)
+    # фото Unsplash (Unsplash License), скачаны в src/photos
+    html = re.sub(r'__PH_([a-z0-9_]+)__', lambda m: 'data:image/jpeg;base64,' + base64.b64encode(
+        (ROOT / 'src' / 'photos' / f'{m.group(1)}.jpg').read_bytes()).decode(), html)
+    left = re.findall(r'__(?:IMG|AV|PH)_[a-z0-9_-]+__', html)
     if left:
         sys.exit(f'unresolved: {left}')
     (ROOT / f'{name}.html').write_text(html, encoding='utf-8')

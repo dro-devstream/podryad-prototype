@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Open+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 body{margin:0}
@@ -79,50 +79,63 @@ body[data-v=a] .va,body[data-v=b] .vb,body[data-v=c] .vc{display:block}
 .va .blink{animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 
-/* ================= B. Премиум ================= */
-.vb{--bg:#0E0F12;--bg2:#16171C;--ink:#F2EEE6;--mut:#9C978C;--line:rgba(242,238,230,.14);--acc:#C8A97E;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-weight:300}
-.vb .serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;letter-spacing:-.01em}
-.vb .sweep{position:absolute;inset:0;background:radial-gradient(600px 400px at var(--x,30%) 30%,rgba(200,169,126,.16),transparent 70%);animation:sweep 16s ease-in-out infinite alternate;pointer-events:none}
-@keyframes sweep{0%{--x:15%}100%{--x:85%}}
-@property --x{syntax:'<percentage>';inherits:false;initial-value:30%}
-.vb header .wrap{display:flex;align-items:center;height:80px;gap:40px}
-.vb .logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;letter-spacing:.04em}
-.vb .logo span{color:var(--acc)}
-.vb nav{display:flex;gap:32px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-.vb nav a:hover{color:var(--ink)}
-.vb .btn{display:inline-flex;align-items:center;gap:12px;padding:15px 28px;border:1px solid var(--acc);color:var(--ink);font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:transparent;cursor:pointer;position:relative;overflow:hidden;transition:color .4s}
-.vb .btn::before{content:'';position:absolute;inset:0;background:var(--acc);transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.7,0,.2,1);z-index:-1}
-.vb .btn:hover{color:#0E0F12}
-.vb .btn:hover::before{transform:scaleX(1);transform-origin:left}
-.vb .btn.p{background:var(--acc);color:#0E0F12}
-.vb .eyebrow{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--acc)}
-.vb h1{font-size:clamp(46px,7vw,96px);line-height:.95;margin:24px 0 0;font-weight:600}
-.vb h1 .ln{display:block;overflow:hidden}
-.vb h1 .ln span{display:block;animation:lineup 1.1s cubic-bezier(.2,.7,.2,1) both}
-.vb h1 .ln:nth-child(2) span{animation-delay:.15s}
-.vb h1 .ln:nth-child(3) span{animation-delay:.3s}
-@keyframes lineup{from{transform:translateY(105%)}}
-.vb h1 em{color:var(--acc);font-style:italic}
-.vb .elev{position:absolute;right:0;bottom:0;width:58%;height:100%;pointer-events:none}
-.vb .elev path,.vb .elev rect,.vb .elev line{fill:none;stroke:rgba(200,169,126,.55);stroke-width:1;stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 6s ease forwards}
-.vb .elev .l2{animation-delay:1.2s;stroke:rgba(242,238,230,.18)}
-.vb .search{margin-top:44px;display:flex;border-bottom:1px solid var(--line);max-width:640px}
-.vb .search input{flex:1;background:transparent;border:0;outline:0;padding:16px 0;font-size:18px;color:var(--ink)}
-.vb .search input::placeholder{color:var(--mut)}
-.vb .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:88px}
-.vb .stats div{background:var(--bg);padding:28px 24px}
-.vb .stats .n{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:600;line-height:1}
-.vb .card{background:var(--bg2);border:1px solid var(--line);transition:border-color .4s,transform .4s}
-.vb .card:hover{border-color:var(--acc);transform:translateY(-4px)}
-.vb .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);border:1px solid rgba(200,169,126,.4);padding:5px 10px}
-.vb .marq{display:flex;gap:64px;width:max-content;animation:tick 50s linear infinite}
+/* ================= B. В духе Yelp ================= */
+.vb{--bg:#FFFFFF;--soft:#F7F7F7;--ink:#2D2E2F;--mut:#6E7072;--line:#EBEBEB;--red:#E0262A;--red-d:#B71C1F;--ok:#008055;background:var(--bg);color:var(--ink);font-family:'Open Sans',system-ui,sans-serif}
+.vb header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line)}
+.vb header .wrap{display:flex;align-items:center;gap:24px;height:76px;max-width:1320px}
+.vb .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:24px;letter-spacing:-.02em;color:var(--red)}
+.vb .logo b{width:30px;height:30px;border-radius:8px;background:var(--red);display:inline-flex;align-items:center;justify-content:center}
+.vb .search{flex:1;max-width:720px;display:flex;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.18);overflow:hidden}
+.vb .search input{border:0;outline:0;padding:13px 16px;font-size:15px;flex:1;min-width:0}
+.vb .search .sep{width:1px;background:var(--line);margin:10px 0}
+.vb .search button{border:0;background:var(--red);color:#fff;width:56px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.vb .search button:hover{background:var(--red-d)}
+.vb .hlinks{display:flex;align-items:center;gap:18px;font-size:14px;font-weight:600;margin-left:auto}
+.vb .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:6px;font-weight:700;font-size:14px;border:1px solid #C8C9CA;background:#fff;cursor:pointer;transition:background .15s,box-shadow .15s}
+.vb .btn:hover{background:var(--soft)}
+.vb .btn.r{background:var(--red);border-color:var(--red);color:#fff}
+.vb .btn.r:hover{background:var(--red-d)}
+.vb .hero{position:relative;height:560px;overflow:hidden;background:#222}
+.vb .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+.vb .slide.on{opacity:1}
+.vb .slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.02)}
+.vb .slide.on img{animation:kb 7s ease-out both}
+@keyframes kb{from{transform:scale(1.12)}to{transform:scale(1.02)}}
+.vb .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.62),rgba(0,0,0,.15) 60%,transparent)}
+.vb .hero .txt{position:absolute;z-index:2;left:max(28px,calc((100% - 1264px)/2));top:50%;transform:translateY(-50%);color:#fff;max-width:560px}
+.vb .hero h1{font-size:clamp(34px,4.6vw,54px);line-height:1.12;font-weight:800;margin:0;letter-spacing:-.01em}
+.vb .hero h1 span{display:inline-block;animation:hin .8s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hin{from{opacity:0;transform:translateY(16px)}}
+.vb .credit{position:absolute;z-index:2;right:max(28px,calc((100% - 1264px)/2));bottom:24px;color:#fff;font-size:13px;text-align:right;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.vb .dots{position:absolute;z-index:2;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:8px}
+.vb .dots button{width:9px;height:9px;border-radius:50%;border:0;background:rgba(255,255,255,.5);cursor:pointer;padding:0}
+.vb .dots button.on{background:#fff;transform:scale(1.25)}
+.vb .cat{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 8px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;transition:box-shadow .2s,transform .2s;text-align:center;background:#fff}
+.vb .cat:hover{box-shadow:0 4px 14px rgba(0,0,0,.12);transform:translateY(-2px)}
+.vb .cat svg{width:34px;height:34px;stroke:var(--ink);transition:stroke .2s,transform .3s}
+.vb .cat:hover svg{stroke:var(--red);transform:scale(1.12) rotate(-6deg)}
+.vb .rs{display:inline-flex;gap:2px;vertical-align:middle}
+.vb .rs i{width:20px;height:20px;border-radius:4px;background:#E6E6E6;display:inline-flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.vb .rs i::before{content:'';position:absolute;inset:0;background:var(--red);transform-origin:left;transform:scaleX(0);transition:transform .35s ease}
+.vb .rs i::after{content:'★';position:relative;color:#fff;font-size:13px;line-height:1}
+.vb .in .rs i::before,.vb .rs.now i::before{transform:scaleX(var(--f,1))}
+.vb .rs i:nth-child(2)::before{transition-delay:.08s}.vb .rs i:nth-child(3)::before{transition-delay:.16s}.vb .rs i:nth-child(4)::before{transition-delay:.24s}.vb .rs i:nth-child(5)::before{transition-delay:.32s}
+.vb .act{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;transition:box-shadow .2s}
+.vb .act:hover{box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.vb .act img.ph{width:100%;height:200px;object-fit:cover;transition:transform .6s}
+.vb .act:hover img.ph{transform:scale(1.05)}
+.vb .res{display:flex;gap:18px;padding:20px;border:1px solid var(--line);border-radius:6px;background:#fff;transition:box-shadow .2s}
+.vb .res:hover{box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.vb .res .ph{width:200px;height:200px;object-fit:cover;border-radius:6px;flex:0 0 200px}
+.vb .pill{display:inline-block;background:#F0F0F0;border-radius:4px;padding:3px 8px;font-size:12px;font-weight:600;color:#4A4B4C}
+.vb .ok{color:var(--ok);font-weight:700;font-size:14px}
 .vb table{width:100%;border-collapse:collapse;font-size:15px}
-.vb td,.vb th{border-bottom:1px solid var(--line);padding:16px 14px;text-align:left}
-.vb th{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);font-weight:400}
-.vb .best{background:rgba(200,169,126,.08)}
-.vb .hl{position:relative}
-.vb .hl::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform .5s}
-.vb .card:hover .hl::after{transform:scaleX(1)}
+.vb td,.vb th{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left}
+.vb th{font-size:13px;color:var(--mut);font-weight:600}
+.vb .best{background:#FFF5F5}
+.vb .newact{animation:newact .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes newact{from{opacity:0;transform:translateY(-14px)}}
+@media (max-width:900px){.vb .res{flex-direction:column}.vb .res .ph{width:100%;flex:auto;height:200px}.vb .hero{height:440px}.vb .search{display:none}}
 
 /* ================= C. Продуктовый ================= */
 .vc{--bg:#F6F7F9;--ink:#0F172A;--mut:#64748B;--line:#E2E8F0;--acc:#2563EB;--acc2:#0EA5A4;--ok:#059669;background:var(--bg);color:var(--ink);font-family:'Onest',system-ui,sans-serif}
@@ -226,41 +239,36 @@ body[data-v=a] .va,body[data-v=b] .vb,body[data-v=c] .vc{display:block}
   </section>
 </div>
 
-<!-- ================= B. ПРЕМИУМ ================= -->
+<!-- ================= B. В ДУХЕ YELP ================= -->
 <div class="v vb">
-  <section style="position:relative;overflow:hidden;min-height:820px">
-    <div class="sweep"></div>
-    <svg class="elev" viewBox="0 0 700 820" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
-      <line x1="40" y1="760" x2="700" y2="760"/>
-      <rect x="140" y="420" width="300" height="340"/>
-      <path d="M120 430 L290 290 L460 430"/>
-      <rect x="440" y="520" width="200" height="240"/>
-      <path d="M430 530 L640 530"/>
-      <rect class="l2" x="180" y="480" width="70" height="90"/><rect class="l2" x="330" y="480" width="70" height="90"/>
-      <rect class="l2" x="260" y="640" width="60" height="120"/><rect class="l2" x="480" y="580" width="120" height="70"/>
-      <path class="l2" d="M290 290 L290 200 M250 240 L330 240"/>
-      <path class="l2" d="M40 760 L40 700 M700 700 L700 760 M40 730 L700 730"/>
-    </svg>
-    <header><div class="wrap"><a class="logo">Подряд<span>.</span></a><nav class="hide-m"><a>Бригады</a><a>Проекты</a><a>Как работаем</a><a>Подрядчикам</a></nav><a class="btn hide-m" style="margin-left:auto">Оставить заявку</a></div></header>
-    <div class="wrap" style="position:relative;padding-top:80px;padding-bottom:80px">
-      <div class="eyebrow">Минск · Минская область</div>
-      <h1 class="serif"><span class="ln"><span>Дом, который</span></span><span class="ln"><span>строят <em>по договору</em>,</span></span><span class="ln"><span>а не на словах</span></span></h1>
-      <p style="max-width:520px;font-size:18px;line-height:1.75;color:var(--mut);margin:32px 0 0">Проверенные бригады, сметы по этапам и приёмка каждого этапа актом. Оплата — только за принятую работу.</p>
-      <div class="search"><input placeholder="Например, кухня-гостиная 32 м² в Уручье"><button class="btn p" style="border:0">Подобрать</button></div>
-      <div class="stats">
-        <div><div class="n serif"><span data-count="3800">0</span></div><div class="eyebrow" style="color:var(--mut);margin-top:10px">проверенных мастеров</div></div>
-        <div><div class="n serif"><span data-count="212">0</span></div><div class="eyebrow" style="color:var(--mut);margin-top:10px">отзывов у лучшей бригады</div></div>
-        <div><div class="n serif">4,9</div><div class="eyebrow" style="color:var(--mut);margin-top:10px">средняя оценка по договорам</div></div>
-      </div>
-    </div>
+  <header><div class="wrap">
+    <a class="logo"><b><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9H3z"/></svg></b>подряд</a>
+    <form class="search hide-m" onsubmit="return false"><input value="ремонт ванной, плитка, электрик…"><span class="sep"></span><input value="Минск"><button aria-label="Найти"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button></form>
+    <div class="hlinks"><a class="hide-m">Для подрядчиков</a><a class="hide-m">Написать отзыв</a><a class="btn">Войти</a><a class="btn r">Регистрация</a></div>
+  </div></header>
+  <section class="hero">
+    <div class="slide on" data-s="0"><img src="__PH_hero1__" alt="Строители на объекте"></div>
+    <div class="slide" data-s="1"><img src="__PH_hero2__" alt="Кухня в процессе ремонта"></div>
+    <div class="slide" data-s="2"><img src="__PH_hero3__" alt="Ванная после ремонта"></div>
+    <div class="txt"><h1 id="vbTitle"><span>Найдите бригаду для стройки дома</span></h1>
+      <a class="btn r" style="margin-top:22px;padding:12px 20px;font-size:15px" id="vbBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span>Строительство</span></a></div>
+    <div class="credit" id="vbCredit">Дом и Камень<br><span style="opacity:.85">Фото проекта · Боровляны</span></div>
+    <div class="dots"><button class="on" data-go="0" aria-label="Слайд 1"></button><button data-go="1" aria-label="Слайд 2"></button><button data-go="2" aria-label="Слайд 3"></button></div>
   </section>
-  <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden"><div class="marq serif" style="font-size:30px;color:var(--mut)">${MARQ_B}</div></div>
-  <section class="wrap" style="padding-top:96px;padding-bottom:140px">
-    <div class="eyebrow">Избранные бригады</div>
-    <h2 class="serif" style="font-size:56px;margin:14px 0 40px;font-weight:600">Мастера, которым доверяют</h2>
-    <div class="two" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">${CARDS_B}</div>
-    <div class="rv" style="margin-top:110px"><div class="eyebrow">Три сметы · заявка №2481</div><h2 class="serif" style="font-size:48px;margin:14px 0 28px;font-weight:600">Сравните предложения</h2>
-      <div style="overflow-x:auto;border:1px solid var(--line)"><table style="min-width:680px"><tbody data-p="TABLE_B"></tbody></table></div></div>
+  <section class="wrap" style="max-width:1320px;padding-top:56px">
+    <h2 style="text-align:center;font-size:26px;font-weight:800;margin:0">Категории</h2>
+    <div class="two" style="display:grid;grid-template-columns:repeat(8,1fr);gap:14px;margin-top:26px">${CATS_B}</div>
+  </section>
+  <section class="wrap" style="max-width:1320px;padding-top:64px">
+    <h2 style="text-align:center;font-size:26px;font-weight:800;margin:0">Недавняя активность</h2>
+    <div class="two" id="vbFeed" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px">${FEED_B}</div>
+  </section>
+  <section class="wrap" style="max-width:1320px;padding-top:72px;padding-bottom:140px">
+    <div style="font-size:14px;color:var(--mut)">Минск · Ремонт квартир</div>
+    <h2 style="font-size:28px;font-weight:800;margin:6px 0 20px">Лучшие бригады для ремонта в Минске</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">${FILTERS_B}</div>
+    <div style="display:flex;flex-direction:column;gap:16px">${RES_B}</div>
+    <div class="rv" style="margin-top:60px;border:1px solid var(--line);border-radius:6px;overflow-x:auto"><div style="padding:18px 16px 4px"><h2 style="font-size:22px;font-weight:800;margin:0">Сравнение смет</h2><div style="color:var(--mut);font-size:14px;margin-top:4px">Заявка №2481 · санузел 4,5 м² · Каменная Горка</div></div><table style="min-width:680px"><tbody data-p="TABLE_B"></tbody></table></div>
   </section>
 </div>
 
@@ -297,7 +305,7 @@ body[data-v=a] .va,body[data-v=b] .vb,body[data-v=c] .vc{display:block}
 <div class="sw" role="group" aria-label="Вариант дизайна">
   <span class="lbl">Вариант</span>
   <button data-v="a"><i style="background:#FF4F00"></i>A · Инженерный</button>
-  <button data-v="b"><i style="background:#C8A97E"></i>B · Премиум</button>
+  <button data-v="b"><i style="background:#E0262A"></i>B · В духе Yelp</button>
   <button data-v="c"><i style="background:#2563EB"></i>C · Продуктовый</button>
 </div>
 
@@ -314,6 +322,7 @@ const Q = [
   { p: 2, total: '13 600', weeks: 4, warranty: '2 года', mat: 'все включены', pay: '3 этапа' }
 ];
 const av = (k, s, extra) => `<img class="av" src="${AV[k]}" width="${s}" height="${s}" style="width:${s}px;height:${s}px;${extra || ''}" alt="">`;
+const rs = r => `<span class="rs">${[0, 1, 2, 3, 4].map(i => `<i style="--f:${Math.max(0, Math.min(1, r - i)).toFixed(2)}"></i>`).join('')}</span>`;
 
 const parts = {
   TICK_A: (() => { const t = ['МАЙСТАР ПЛЮС → СМЕТА 12 400 BYN · КАМЕННАЯ ГОРКА', 'НОВАЯ ЗАЯВКА · КУХНЯ 18 М² · УРУЧЬЕ', 'ЭТАП ПРИНЯТ · ЭЛЕКТРИКА · 3 100 BYN', 'РЕМОНТ ЛАБ → СМЕТА 13 600 BYN', 'ОТЗЫВ ★5 · САНУЗЕЛ · ЛОШИЦА']; return t.concat(t).map(x => `<span>${x}</span><span style="color:#FF4F00">■</span>`).join(''); })(),
@@ -327,14 +336,23 @@ const parts = {
   TABLE_A: `<tr><th></th>${Q.map(q => `<th>${PROS[q.p].name}${q.best ? ' <span style="color:#C43D00">· лучшая</span>' : ''}</th>`).join('')}</tr>` +
     [['Цена, BYN', q => `<span class="mono" style="font-size:22px">${q.total}</span>`], ['Срок, нед.', q => `<span class="mono">${q.weeks}</span>`], ['Гарантия', q => q.warranty], ['Материалы', q => q.mat], ['Оплата', q => q.pay], ['', q => `<a class="btn ${q.best ? 'p' : ''}">Выбрать</a>`]]
       .map(r => `<tr class="${''}"><th>${r[0]}</th>${Q.map(q => `<td style="${q.best ? 'background:#FFF3EC' : ''}">${r[1](q)}</td>`).join('')}</tr>`).join(''),
-  MARQ_B: (() => { const t = ['Кухня в сталинке · Фрунзенский', 'Дом из газосиликата · Боровляны', 'Санузел с ванной · Каменная Горка', 'Мансарда · Колодищи', 'Однушка в центре · Немига']; return t.concat(t).map(x => `<span>${x}</span><span style="color:#C8A97E">◆</span>`).join(''); })(),
-  CARDS_B: PROS.map(p => `<div class="card rv" style="padding:30px">
-      <div style="display:flex;gap:16px;align-items:center">${av(p.av, 64, 'border:1px solid rgba(200,169,126,.6)')}<div><div class="serif hl" style="font-size:28px;display:inline-block">${p.name}</div><div style="color:var(--mut);font-size:14px;margin-top:4px">${p.owner}</div></div></div>
-      <div style="margin-top:26px;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding-top:18px"><span class="serif" style="font-size:40px;color:var(--acc)">${p.r}</span><span style="color:var(--mut);font-size:13px;letter-spacing:.1em;text-transform:uppercase">${p.n} отзывов</span></div>
-      <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:14px"><span style="color:var(--mut)">от ${p.price} BYN/м²</span><span style="color:var(--mut)">${p.area}</span></div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px">${p.badges.map(b => `<span class="tag">${b}</span>`).join('')}</div></div>`).join(''),
-  TABLE_B: `<tr><th></th>${Q.map(q => `<th>${PROS[q.p].name}</th>`).join('')}</tr>` +
-    [['Стоимость', q => `<span class="serif" style="font-size:32px;${q.best ? 'color:#C8A97E' : ''}">${q.total} BYN</span>`], ['Срок', q => `${q.weeks} недель`], ['Гарантия', q => q.warranty], ['Материалы', q => q.mat], ['Оплата', q => q.pay], ['', q => `<a class="btn ${q.best ? 'p' : ''}">Выбрать</a>`]]
+  CATS_B: [['Ремонт', '<path d="M3 21h18M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/>'], ['Сантехника', '<path d="M4 4h6v4H4zM7 8v4h10v8"/><path d="M14 20h6"/>'], ['Электрика', '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'], ['Кровля', '<path d="M2 12L12 4l10 8"/><path d="M5 10v10h14V10"/>'], ['Плитка', '<rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>'], ['Окна и двери', '<rect x="5" y="3" width="14" height="18"/><path d="M12 3v18M5 12h14"/>'], ['Покраска', '<rect x="3" y="3" width="14" height="6" rx="1"/><path d="M17 6h3v6h-8v3"/><path d="M12 15v6"/>'], ['Фундамент', '<path d="M2 20h20M4 20v-5h16v5M7 15v-4h10v4"/>']]
+    .map(c => `<a class="cat"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">${c[1]}</svg>${c[0]}</a>`).join(''),
+  FEED_B: [
+    { u: 'Ганна К.', a: 'hanna', what: 'оставила отзыв', biz: 'Майстар Плюс', ph: '__PH_kitchen__', r: 5, t: 'Смета не выросла ни на рубль, хотя в стене нашли старую проводку. Каждый вечер — фото и отчёт.' },
+    { u: 'Ксения Л.', a: 'ksenia', what: 'добавила фото', biz: 'Бригада Сидоренко', ph: '__PH_bath__', r: 5, t: 'Санузел за 18 дней. Гидроизоляцию показали до укладки плитки, всё по акту.' },
+    { u: 'Дмитрий В.', a: 'dmitry', what: 'оставил отзыв', biz: 'Дом и Камень', ph: '__PH_house__', r: 5, t: 'Коробка дома за 4 месяца, аттестат и все акты на месте. Технадзор вопросов не нашёл.' }
+  ].map(f => `<div class="act rv"><div style="display:flex;gap:10px;align-items:center;padding:14px">${av(f.a, 40)}<div style="font-size:14px;line-height:1.35"><b>${f.u}</b><br><span style="color:var(--mut)">${f.what}</span></div></div><div style="overflow:hidden"><img class="ph" src="${f.ph}" alt=""></div><div style="padding:14px"><div style="font-weight:800;font-size:16px">${f.biz}</div><div style="margin:6px 0">${rs(f.r)}</div><div style="font-size:14px;line-height:1.5;color:#4A4B4C">${f.t}</div></div></div>`).join(''),
+  FILTERS_B: ['Под ключ', 'Отвечают за час', 'Договор и акт', 'Гарантия от 2 лет', 'Свободны в ноябре', 'Цена ▾'].map((x, i) => `<a class="btn" style="border-radius:999px;padding:7px 14px;font-weight:600${i === 0 ? ';background:#2D2E2F;color:#fff;border-color:#2D2E2F' : ''}">${x}</a>`).join(''),
+  RES_B: PROS.map((p, i) => `<div class="res rv"><img class="ph" src="${['__PH_ladder__', '__PH_plaster__', '__PH_elec__'][i]}" alt=""><div style="flex:1;min-width:0">
+      <div style="display:flex;gap:12px;align-items:center">${av(p.av, 44)}<div><div style="font-size:20px;font-weight:800">${i + 1}. ${p.name}</div><div style="font-size:13px;color:var(--mut)">${p.owner}</div></div></div>
+      <div style="margin-top:10px;display:flex;align-items:center;gap:8px;font-size:14px">${rs(parseFloat(p.r.replace(',', '.')))}<b>${p.r}</b><span style="color:var(--mut)">(${p.n} отзывов)</span></div>
+      <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="pill">Ремонт под ключ</span><span class="pill">Санузлы</span><span style="font-size:14px;color:var(--mut)">· от ${p.price} BYN/м² · ${p.area}</span></div>
+      <div style="margin-top:8px" class="ok">● Отвечает за ${p.resp}<span style="color:var(--mut);font-weight:400"> · ${p.badges.join(' · ')}</span></div>
+      <p style="margin:10px 0 0;font-size:14px;line-height:1.55;color:#4A4B4C">💬 «${['Смета не выросла ни на рубль, хотя внутри стены нашли старую проводку', 'Плитку положили ровно, гидроизоляцию показали до укладки', 'Дизайнер и прораб в одной команде, смета не выросла'][i]}» <a style="color:var(--red);font-weight:600">ещё</a></p>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn r">Запросить смету</a><a class="btn">Написать</a></div></div></div>`).join(''),
+  TABLE_B: `<tr><th></th>${Q.map(q => `<th>${PROS[q.p].name}${q.best ? ' <span class="pill" style="background:#FFE5E5;color:#B71C1F">Лучшее соотношение</span>' : ''}</th>`).join('')}</tr>` +
+    [['Цена', q => `<b style="font-size:20px">${q.total} BYN</b>`], ['Рейтинг', q => `${rs(parseFloat(PROS[q.p].r.replace(',', '.')))}`], ['Срок', q => `${q.weeks} недель`], ['Гарантия', q => q.warranty], ['Материалы', q => q.mat], ['', q => `<a class="btn ${q.best ? 'r' : ''}">Выбрать</a>`]]
       .map(r => `<tr><th>${r[0]}</th>${Q.map(q => `<td class="${q.best ? 'best' : ''}">${r[1](q)}</td>`).join('')}</tr>`).join(''),
   AVSTACK_C: ['hanna', 'ksenia', 'dmitry', 'olga'].map((k, i) => av(k, 34, `border:2px solid #fff;${i ? 'margin-left:-10px' : ''}`)).join(''),
   NOTIFS_C: Q.map(q => { const p = PROS[q.p]; return `<div class="notif">${av(p.av, 44)}<div style="flex:1;min-width:0"><div style="font-weight:700">${p.name}</div><div style="font-size:13px;color:var(--mut)">прислала смету · ${q.weeks} нед. · гарантия ${q.warranty}</div></div><div style="font-weight:800;font-size:18px">${q.total} BYN</div></div>`; }).join(''),
@@ -382,6 +400,20 @@ function animate(root) {
 /* шаги заявки в варианте C */
 let st = 0;
 setInterval(() => { st = (st + 1) % 4; document.querySelectorAll('.vc .step').forEach(s => s.classList.toggle('on', +s.dataset.step <= st)); }, 2200);
+
+/* вариант B: слайдер героя и лента активности */
+const SL = [['Найдите бригаду для стройки дома', 'Строительство', 'Дом и Камень', 'Фото проекта · Боровляны'], ['Найдите мастера для ремонта кухни', 'Кухни', 'Майстар Плюс', 'Фото проекта · Фрунзенский р-н'], ['Найдите мастера для санузла', 'Санузлы', 'Бригада Сидоренко', 'Фото проекта · Каменная Горка']];
+let si = 0;
+function goSlide(n) {
+  si = n;
+  document.querySelectorAll('.vb .slide').forEach(s => s.classList.toggle('on', +s.dataset.s === n));
+  document.querySelectorAll('.vb .dots button').forEach(b => b.classList.toggle('on', +b.dataset.go === n));
+  document.getElementById('vbTitle').innerHTML = `<span>${SL[n][0]}</span>`;
+  document.querySelector('#vbBtn span').textContent = SL[n][1];
+  document.getElementById('vbCredit').innerHTML = `${SL[n][2]}<br><span style="opacity:.85">${SL[n][3]}</span>`;
+}
+document.querySelectorAll('.vb .dots button').forEach(b => b.addEventListener('click', () => goSlide(+b.dataset.go)));
+setInterval(() => { if (document.body.dataset.v === 'b' && !reduce) goSlide((si + 1) % 3); }, 6000);
 
 setV(location.hash.slice(1) || 'a', false);
 </script>

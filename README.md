@@ -18,3 +18,7 @@
 
 ## Лицензии
 Аватары — DiceBear «Notionists» (ремикс работы Zoish), CC0 1.0. Иллюстрации нарисованы для прототипа.
+
+Фото в варианте B (`variants.html#b`) — с Unsplash по бесплатной лицензии Unsplash License, фильтр «free»; ID снимков указаны в `src/variants.template.html` и `src/photos/`.
+
+Страница вариантов дизайна: `variants.html` (#a инженерный, #b в духе Yelp, #c продуктовый). Сборка: `python3 -I build.py variants`.
