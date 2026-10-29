@@ -115,10 +115,10 @@ nav.links a.cur{border-bottom-color:var(--acc)}
 .mark{display:inline-block}
 .stats{margin-top:40px;display:flex;flex-wrap:wrap;gap:36px}
 .stats .n{font-size:30px;font-weight:700}
-.credit{position:absolute;right:14px;bottom:12px;z-index:2;color:#fff;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,.6);text-align:right}
-.sdots{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;display:flex;gap:7px}
-.sdots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:rgba(255,255,255,.55);cursor:pointer}
-.sdots button.on{background:#fff;transform:scale(1.3)}
+.sctl{position:absolute;right:14px;bottom:14px;z-index:3;display:flex;align-items:center;gap:10px;color:#fff;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.sctl button{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.6);background:rgba(0,0,0,.35);color:#fff;font-size:18px;line-height:1;cursor:pointer;backdrop-filter:blur(4px)}
+.sctl button:hover{background:rgba(0,0,0,.6)}
+.sctl .cap{text-align:right;line-height:1.35}
 /* полоса */
 .band{background:var(--band);color:var(--band-ink);overflow:hidden;padding:16px 0}
 .marq{display:flex;gap:44px;width:max-content;animation:marq 36s linear infinite;font-family:var(--f-d);font-weight:700;font-size:22px}
@@ -212,7 +212,9 @@ body[data-theme=eng] .phead{background:var(--surface);border-bottom:1px solid va
 body[data-theme=eng] .h1,body[data-theme=eng] .h2{line-height:1}
 
 body[data-theme=yelp] .home-hero{background:#222;color:#fff;min-height:600px}
+body[data-theme=yelp] .home-hero .hero-in{position:static}
 body[data-theme=yelp] .hero-art{position:absolute;inset:0;height:auto;flex:none;z-index:0}
+body[data-theme=yelp] .sctl{right:max(24px,calc((100vw - 1240px) / 2 + 24px));bottom:22px}
 body[data-theme=yelp] .frame{inset:0;border-radius:0}
 body[data-theme=yelp] .frame::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.7),rgba(0,0,0,.25) 65%,rgba(0,0,0,.1))}
 body[data-theme=yelp] .sticker,body[data-theme=yelp] .stamp{display:none}
@@ -269,7 +271,7 @@ body[data-theme=prod] .sticker{border-radius:16px;border:1px solid var(--line)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
-<body data-theme="juicy">
+<body data-theme="yelp">
 <div class="ribbon">Кликабельный прототип «Подряд» · Беларусь · компании, люди и цены вымышлены · фото: Unsplash</div>
 <header class="top">
   <div class="wrap">
@@ -303,9 +305,9 @@ body[data-theme=prod] .sticker{border-radius:16px;border:1px solid var(--line)}
 </footer>
 <div class="themes" role="group" aria-label="Стиль оформления">
   <span class="l">Стиль</span>
+  <button data-theme="yelp"><i style="background:#E0262A"></i><span>В духе Yelp</span></button>
   <button data-theme="juicy"><i style="background:#FF5A1F"></i><span>Сочный</span></button>
   <button data-theme="eng"><i style="background:#111214;outline:1px solid #FF4F00"></i><span>Инженерный</span></button>
-  <button data-theme="yelp"><i style="background:#E0262A"></i><span>В духе Yelp</span></button>
   <button data-theme="prod"><i style="background:#2563EB"></i><span>Продуктовый</span></button>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -359,7 +361,7 @@ const QUOTES = [
 ];
 
 const STATE = {
-  theme: 'juicy',
+  theme: 'yelp',
   search: { cat: 'remont', sort: 'rec', fast: false, hl: null },
   wiz: { step: 1, target: null, _t: undefined, type: 'Ремонт под ключ', parts: { 'Ванная и санузел': true }, budget: '10–30 тыс. BYN', timing: 'Как можно скорее' },
   chosen: 'maystar',
@@ -428,6 +430,7 @@ const pageHead = (crumb, title, extra) => `<section class="hero phead" style="bo
 
 /* ---------- Главная ---------- */
 const SLIDES = [['hero1', 'Дом и Камень', 'Объект в Боровлянах'], ['hero2', 'Майстар Плюс', 'Кухня в процессе, Фрунзенский р-н'], ['hero3', 'Бригада Сидоренко', 'Санузел после ремонта, Каменная Горка']];
+const capTxt = n => `Фото ${n + 1} из ${SLIDES.length} · <b>${SLIDES[n][1]}</b><br>${SLIDES[n][2]}`;
 function home() {
   const tick = ['Ремонт под ключ', 'Санузлы', 'Кровля', 'Фундамент', 'Электрика', 'Окна', 'Фасады', 'Дизайн-проект'];
   const top = PROS.slice(0, 3);
@@ -447,9 +450,8 @@ function home() {
         <div class="stats"><div><div class="n">3 800</div><div class="mut lab" style="font-size:14px">проверенных мастеров</div></div><div><div class="n">38 мин</div><div class="mut lab" style="font-size:14px">средний первый ответ</div></div><div><div class="n">до 5 смет</div><div class="mut lab" style="font-size:14px">на одну заявку</div></div></div>
       </div>
       <div class="hero-art rise" style="animation-delay:.1s">
-        <div class="frame">${SLIDES.map((s, i) => `<div class="slide ${i === 0 ? 'on' : ''}" data-s="${i}"><img src="${P(s[0])}" alt="${s[2]}"></div>`).join('')}
-          <div class="credit" id="credit"><b>${SLIDES[0][1]}</b><br>${SLIDES[0][2]}</div>
-          <div class="sdots">${SLIDES.map((s, i) => `<button data-act="slide" data-v="${i}" class="${i === 0 ? 'on' : ''}" aria-label="Фото ${i + 1}"></button>`).join('')}</div></div>
+        <div class="frame">${SLIDES.map((s, i) => `<div class="slide ${i === 0 ? 'on' : ''}" data-s="${i}"><img src="${P(s[0])}" alt="" onerror="this.style.display='none'"></div>`).join('')}
+          <div class="sctl"><div class="cap" id="credit">${capTxt(0)}</div><button data-act="slideprev" aria-label="Предыдущее фото">‹</button><button data-act="slidenext" aria-label="Следующее фото">›</button></div></div>
         <a href="#/compare" class="sticker float" style="left:-14px;top:64px;width:240px">${av('ales', 44, 'Алесь Ковальчук')}<div><div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--acc-t)"><span class="ping"></span>Новая смета</div><div class="d" style="font-size:19px;margin-top:2px">12 400 BYN</div><div class="mut" style="font-size:12px;font-weight:600">Санузел 4,5 м² · 5 недель</div></div></a>
         <div class="sticker float2" style="right:-10px;bottom:34px"><div style="display:flex">${av('hanna', 32)}<span style="margin-left:-9px">${av('ksenia', 32)}</span><span style="margin-left:-9px">${av('dmitry', 32)}</span></div><div>${rating(4.9)}<div style="font-size:12px;font-weight:600;margin-top:2px">212 отзывов по договорам</div></div></div>
       </div>
@@ -742,16 +744,15 @@ let si = 0;
 function goSlide(n) {
   si = n;
   document.querySelectorAll('.slide').forEach(s => s.classList.toggle('on', +s.dataset.s === n));
-  document.querySelectorAll('.sdots button').forEach(b => b.classList.toggle('on', +b.dataset.v === n));
-  const c = document.getElementById('credit'); if (c) c.innerHTML = `<b>${SLIDES[n][1]}</b><br>${SLIDES[n][2]}`;
+  const c = document.getElementById('credit'); if (c) c.innerHTML = capTxt(n);
 }
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 setInterval(() => { if (!reduce && document.querySelector('.slide')) goSlide((si + 1) % SLIDES.length); }, 6000);
 function setTheme(t, rerender) {
-  if (!['juicy', 'eng', 'yelp', 'prod'].includes(t)) t = 'juicy';
+  if (!['juicy', 'eng', 'yelp', 'prod'].includes(t)) t = 'yelp';
   STATE.theme = t; document.body.dataset.theme = t;
   document.querySelectorAll('.themes button').forEach(b => b.classList.toggle('on', b.dataset.theme === t));
-  try { localStorage.setItem('podryad-theme', t); } catch (e) {}
+  try { localStorage.setItem('podryad-theme-v2', t); } catch (e) {}
   if (rerender) { render(true); toast('Стиль: ' + { juicy: 'Сочный', eng: 'Инженерный', yelp: 'В духе Yelp', prod: 'Продуктовый' }[t]); }
 }
 document.querySelectorAll('.themes button').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.theme, true)));
@@ -761,7 +762,8 @@ const ACTS = {
   cat: v => { location.hash = '#/search?cat=' + v; },
   sort: v => { STATE.search.sort = v; render(true); },
   fast: () => { STATE.search.fast = !STATE.search.fast; render(true); },
-  slide: v => goSlide(+v),
+  slideprev: () => goSlide((si + SLIDES.length - 1) % SLIDES.length),
+  slidenext: () => goSlide((si + 1) % SLIDES.length),
   wtype: v => { STATE.wiz.type = v; render(true); },
   wpart: v => { STATE.wiz.parts[v] = !STATE.wiz.parts[v]; render(true); },
   wbudget: v => { STATE.wiz.budget = v; render(true); },
@@ -819,7 +821,7 @@ document.addEventListener('submit', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 window.addEventListener('hashchange', route);
-let saved = 'juicy'; try { saved = localStorage.getItem('podryad-theme') || 'juicy'; } catch (e) {}
+let saved = 'yelp'; try { saved = localStorage.getItem('podryad-theme-v2') || 'yelp'; } catch (e) {}
 setTheme(saved, false);
 route();
 </script>
