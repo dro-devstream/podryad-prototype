@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Подряд — кликабельный прототип</title>
+<meta name="description" content="Прототип маркетплейса стройки и ремонта для Беларуси. Все компании, люди и цены вымышлены.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17132B;--cream:#FFF4E8;--card:#FFFFFF;--line:rgba(23,19,43,.12);--muted:#645E78;--orange:#FF5A1F;--orange-t:#C7400A;--yellow:#FFC93C;--violet:#6C4BFF;--mint:#19C39B;--mint-t:#0B7A5F;--pink:#FF8FB1;--sky:#BFE3FF}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit}
+.disp{font-family:'Unbounded','Manrope',sans-serif;letter-spacing:-.01em}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+.muted{color:var(--muted)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;animation:drift 18s ease-in-out infinite alternate;pointer-events:none}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-40px) scale(1.15)}100%{transform:translate(-40px,30px) scale(.95)}}
+.dots{position:absolute;inset:0;background-image:radial-gradient(rgba(23,19,43,.15) 1.5px,transparent 1.6px);background-size:22px 22px;pointer-events:none}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:26px}
+.pop{transition:transform .25s cubic-bezier(.2,1.4,.4,1),box-shadow .25s ease}
+.pop:hover{transform:translate(-4px,-4px);box-shadow:8px 8px 0 var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;font-size:15px;padding:12px 22px;cursor:pointer;background:var(--card);box-shadow:4px 4px 0 var(--ink);transition:transform .15s ease,box-shadow .15s ease;white-space:nowrap}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.o{background:var(--orange)}.btn.y{background:var(--yellow)}.btn.d{background:var(--ink);color:var(--cream);box-shadow:4px 4px 0 var(--orange)}.btn.s{background:var(--sky)}
+.btn.sm{padding:9px 16px;font-size:14px;box-shadow:3px 3px 0 var(--ink)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.chip{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px;background:var(--card);cursor:pointer;transition:transform .2s ease,background .2s ease}
+.chip:hover{transform:rotate(-2deg)}
+.chip.on{background:var(--ink);color:var(--cream)}
+.tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:800}
+.tag.ok{background:#D3F5EA;color:var(--mint-t)}
+.tag.star{background:var(--yellow);border:2px solid var(--ink);padding:3px 10px}
+.eyebrow{display:inline-block;border:2px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px}
+.av{border-radius:50%;border:2px solid var(--ink);background:#fff;object-fit:cover;flex:0 0 auto}
+.logo{display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);font-weight:800;flex:0 0 auto}
+.ping{animation:ping 2s ease-in-out infinite;width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 10px}
+@keyframes ping{0%,100%{box-shadow:0 0 0 0 rgba(255,90,31,.6)}50%{box-shadow:0 0 0 9px rgba(255,90,31,0)}}
+.float{animation:float 6s ease-in-out infinite}.float2{animation:float 7s ease-in-out -3s infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-14px) rotate(calc(var(--r,0deg) + 2deg))}}
+.spin{animation:spin 22s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rise{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.marq{display:flex;gap:44px;width:max-content;animation:marq 34s linear infinite}
+@keyframes marq{to{transform:translateX(-50%)}}
+.bar{transform-origin:left;animation:grow 1.3s cubic-bezier(.2,.7,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}}
+input,textarea,select{font:inherit;color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:800;color:var(--muted)}
+.field input,.field textarea{padding:13px 15px;border:2px solid var(--ink);border-radius:16px;background:var(--card);font-weight:700;font-size:16px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;padding:14px 18px;font-weight:700;font-size:16px;border:2px solid var(--ink);border-radius:18px;background:var(--card);cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.opt:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+.opt.on{background:var(--ink);color:var(--cream)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--violet);outline-offset:3px}
+.ribbon{background:var(--ink);color:var(--cream);font-size:13px;font-weight:700;text-align:center;padding:8px 16px}
+.ribbon b{color:var(--yellow)}
+header.top{position:sticky;top:0;z-index:20;background:rgba(255,244,232,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+header.top .wrap{display:flex;align-items:center;gap:22px;height:72px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Unbounded',sans-serif;font-weight:800;font-size:22px}
+.brand i{width:38px;height:38px;border-radius:12px;background:var(--orange);border:2px solid var(--ink);display:inline-flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 var(--ink)}
+nav.links{display:flex;gap:22px;font-weight:700;font-size:15px}
+nav.links a.cur{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:var(--orange)}
+.right{margin-left:auto;display:flex;gap:10px;align-items:center}
+section{position:relative}
+h1,h2,h3{margin:0}
+.h2{font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.1}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.row{display:flex;gap:28px;align-items:flex-start}
+.side{position:sticky;top:96px;flex:0 0 360px;display:flex;flex-direction:column;gap:18px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:var(--cream);border-radius:18px;padding:14px 20px;font-weight:700;box-shadow:5px 5px 0 var(--orange);transition:transform .35s cubic-bezier(.2,1.3,.4,1);z-index:60;max-width:92vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.modal-bg{position:fixed;inset:0;background:rgba(23,19,43,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50;animation:fade .2s ease}
+@keyframes fade{from{opacity:0}}
+.modal{background:var(--cream);border:3px solid var(--ink);border-radius:30px;box-shadow:10px 10px 0 var(--ink);width:min(720px,100%);max-height:92vh;overflow:auto;padding:28px;animation:rise .35s cubic-bezier(.2,.7,.2,1) both}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t td,table.t th{padding:12px 14px;border-bottom:2px solid var(--line);text-align:left;vertical-align:top}
+table.t th{font-size:13px;color:var(--muted);font-weight:800}
+.scroll-x{overflow-x:auto}
+.cf{position:absolute;width:14px;height:14px;border:2px solid var(--ink);animation:cf 2.6s ease-in infinite;top:0}
+@keyframes cf{0%{transform:translateY(-30px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(380px) rotate(540deg);opacity:0}}
+.stars button{background:none;border:0;font-size:34px;cursor:pointer;color:#D9D3E8;padding:0 2px}
+.stars button.on{color:var(--orange)}
+footer{background:var(--ink);color:#C9C3DD;margin-top:96px}
+@media (max-width:1000px){
+  nav.links{display:none}
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .grid3{grid-template-columns:1fr}
+  .row{flex-direction:column}
+  .side{position:static;flex:auto;width:100%}
+  .hide-m{display:none!important}
+  .hero{flex-direction:column}
+  .hero-art{width:100%!important;flex:auto!important;height:440px!important}
+}
+@media (max-width:600px){
+  .wrap{padding:0 16px}
+  .grid2{grid-template-columns:1fr}
+  .brand{font-size:18px}
+  .right .btn.ghost{display:none}
+  header.top .wrap{gap:12px}
+  .search-form{flex-direction:column;border-radius:24px!important}
+  .search-form .sep{display:none}
+  .modal{padding:20px}
+  .hero-art{height:360px!important}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="ribbon">Кликабельный прототип <b>«Подряд»</b> · Беларусь · все компании, люди и цены вымышлены</div>
+<header class="top">
+  <div class="wrap">
+    <a href="#/" class="brand"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#17132B" stroke-width="2.6" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9H3z"/><path d="M9 20v-6h6v6"/></svg></i>Подряд</a>
+    <nav class="links" id="nav">
+      <a href="#/search">Найти мастера</a>
+      <a href="#/compare">Мои сметы</a>
+      <a href="#/project">Мой ремонт</a>
+      <a href="#/cabinet">Для подрядчиков</a>
+    </nav>
+    <div class="right">
+      <a href="#/cabinet" class="btn sm ghost">Я подрядчик</a>
+      <a href="#/request" class="btn sm d">Заявка</a>
+    </div>
+  </div>
+</header>
+<main id="app"></main>
+<footer>
+  <div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px;padding-top:48px;padding-bottom:48px">
+    <div style="max-width:380px">
+      <div class="brand" style="color:var(--cream)"><i></i>Подряд</div>
+      <p style="font-size:14px;line-height:1.6;margin:14px 0 0">Прототип маркетплейса стройки и ремонта для Беларуси. Компании, люди, отзывы и цены вымышлены, совпадения случайны.</p>
+      <p style="font-size:13px;line-height:1.6;margin:10px 0 0;opacity:.8">Аватары: DiceBear «Notionists» по работе Zoish, лицензия CC0 1.0. Иллюстрации нарисованы для прототипа.</p>
+    </div>
+    <div style="display:flex;gap:48px;font-size:14px;line-height:2;flex-wrap:wrap">
+      <div><b style="color:var(--cream)">Клиентам</b><br><a href="#/search">Найти мастера</a><br><a href="#/request">Разместить заявку</a><br><a href="#/compare">Сравнить сметы</a></div>
+      <div><b style="color:var(--cream)">Подрядчикам</b><br><a href="#/cabinet">Кабинет</a><br><a href="#/pro/maystar">Пример профиля</a></div>
+    </div>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="modal"></div>
+
+<script>
+const IMG = {
+  hero: '__IMG_hero__', map: '__IMG_map__',
+  kitchen: '__IMG_cat-kitchen__', bath: '__IMG_cat-bath__', roof: '__IMG_cat-roof__', foundation: '__IMG_cat-foundation__',
+  electric: '__IMG_cat-electric__', plumbing: '__IMG_cat-plumbing__', window: '__IMG_cat-window__', paint: '__IMG_cat-paint__',
+  pk: '__IMG_proj-kitchen__', pb: '__IMG_proj-bath__', pf: '__IMG_proj-facade__', pl: '__IMG_proj-loft__'
+};
+const AV = {
+  ales: '__AV_ales__', pavel_s: '__AV_pavel_s__', viktor: '__AV_viktor__', yana: '__AV_yana__', oleg: '__AV_oleg__', sergey: '__AV_sergey__',
+  hanna: '__AV_hanna__', pavel_n: '__AV_pavel_n__', ksenia: '__AV_ksenia__', dmitry: '__AV_dmitry__', olga: '__AV_olga__', andrei: '__AV_andrei__',
+  maria: '__AV_maria__', ivan: '__AV_ivan__', katya: '__AV_katya__', me: '__AV_me__'
+};
+
+const CATS = [
+  { id: 'remont', name: 'Ремонт под ключ', img: 'kitchen', bg: '#FFE0D1', count: '1 140 бригад' },
+  { id: 'bath', name: 'Ванная и санузел', img: 'bath', bg: '#E6E0FF', count: '620 мастеров' },
+  { id: 'roof', name: 'Кровля', img: 'roof', bg: '#FFF0C2', count: '210 бригад' },
+  { id: 'found', name: 'Фундамент и бетон', img: 'foundation', bg: '#D3F5EA', count: '180 бригад' },
+  { id: 'elec', name: 'Электрика', img: 'electric', bg: '#FFF0C2', count: '760 мастеров' },
+  { id: 'plumb', name: 'Сантехника', img: 'plumbing', bg: '#D6ECFF', count: '690 мастеров' },
+  { id: 'win', name: 'Окна и двери', img: 'window', bg: '#FFE0D1', count: '240 компаний' },
+  { id: 'paint', name: 'Отделка и покраска', img: 'paint', bg: '#E6E0FF', count: '980 мастеров' }
+];
+
+const REVIEWS = {
+  r1: { who: 'Ганна К.', av: 'hanna', meta: 'Кухня и санузел, Фрунзенский · договор от 12.08.2026', stars: 5, text: 'Смета не выросла ни на рубль, хотя в стене нашли старую алюминиевую проводку. Каждый вечер прораб присылал фото и что сделано за день.', reply: 'Ганна, спасибо! Замену проводки заложили как риск ещё на замере — так делаем во всех домах до 1990 года.' },
+  r2: { who: 'Павел Н.', av: 'pavel_n', meta: 'Перепланировка, Уручье · договор от 03.06.2026', stars: 5, text: 'Согласование в исполкоме заняло на две недели дольше, но держали в курсе и не просили денег вперёд.', reply: 'Павел, согласования сейчас идут дольше — обновили сроки в типовой смете.' },
+  r3: { who: 'Ксения Л.', av: 'ksenia', meta: 'Санузел 4 м², Каменная Горка · договор от 21.07.2026', stars: 5, text: 'Сделали санузел за 18 дней. Плитку положили ровно, гидроизоляцию показали до укладки, всё по акту.', reply: 'Ксения, рады, что всё понравилось. Гарантия 2 года — пишите, если что.' },
+  r4: { who: 'Дмитрий В.', av: 'dmitry', meta: 'Дом из газосиликата, Боровляны · договор от 10.04.2026', stars: 5, text: 'Коробка дома за 4 месяца. Аттестат и все акты на месте, технадзор вопросов не нашёл.', reply: 'Дмитрий, спасибо! Ждём на кровлю весной.' },
+  r5: { who: 'Ольга Ш.', av: 'olga', meta: 'Ремонт однушки, Центральный · договор от 02.09.2026', stars: 4, text: 'Дизайн-проект и ремонт в одних руках — удобно. Сдали на неделю позже из-за поставки плитки, но предупредили заранее.', reply: 'Ольга, задержку с плиткой учли: теперь заказываем материалы до начала работ.' },
+  r6: { who: 'Андрей Т.', av: 'andrei', meta: 'Электрика в квартире, Сухарево · договор от 15.10.2026', stars: 5, text: 'Поменяли всю проводку и щит за 4 дня, штробы аккуратные, схема разводки на руках.', reply: 'Андрей, спасибо! Схему храните — пригодится при ремонте.' }
+};
+
+const PROS = [
+  { id: 'maystar', name: 'Майстар Плюс', ini: 'МП', color: '#FF5A1F', owner: 'Алесь Ковальчук', role: 'директор и прораб', av: 'ales', legal: 'ООО', since: 2014, team: 14, district: 'Фрунзенский р-н', dist: '1,8 км', rating: 4.9, reviews: 212, priceNum: 310, unit: 'м²', resp: 20, respRate: 98, onTime: 94, free: '16 ноября', cats: ['remont', 'bath', 'paint', 'elec', 'plumb'], badges: ['УНП проверен', 'Договор и акт', 'Гарантия 2 года'], desc: 'Ремонт квартир под ключ, санузлы и перепланировки с согласованием в исполкоме. Своя бригада из 14 человек, прораб на каждом объекте, фотоотчёт каждый день.', portfolio: [['pk', 'Кухня в сталинке', 'Фрунзенский · 18 м² · 6 недель', '38 000 BYN'], ['pb', 'Санузел с ванной', 'Каменная Горка · 4,5 м² · 3 недели', '13 500 BYN'], ['pl', 'Гостиная-лофт', 'Центральный · 32 м² · 5 недель', '31 000 BYN'], ['pf', 'Отделка коттеджа', 'Ждановичи · 140 м² · 3 месяца', '96 000 BYN']], services: [['Ремонт под ключ', 'Черновые и чистовые работы, закупка материалов', 'от 310 BYN/м²'], ['Санузел под ключ', 'Демонтаж, гидроизоляция, плитка, сантехника', 'от 6 000 BYN'], ['Перепланировка', 'Проект, согласование, работы', 'от 2 000 BYN'], ['Электрика', 'Новая разводка, щит, акт скрытых работ', 'от 60 BYN/точка']], rev: ['r1', 'r2', 'r3'] },
+  { id: 'sidorenko', name: 'Бригада Сидоренко', ini: 'БС', color: '#6C4BFF', owner: 'Павел Сидоренко', role: 'ИП, мастер-плиточник', av: 'pavel_s', legal: 'ИП', since: 2017, team: 5, district: 'Московский р-н', dist: '3,4 км', rating: 4.8, reviews: 96, priceNum: 260, unit: 'м²', resp: 60, respRate: 95, onTime: 91, free: '2 декабря', cats: ['bath', 'plumb', 'remont', 'paint'], badges: ['УНП проверен', 'Договор и акт', 'Гарантия 1 год'], desc: 'Санузлы и кухни под ключ небольшой бригадой. Плитка крупного формата, скрытые инсталляции, тёплые полы.', portfolio: [['pb', 'Санузел в панельке', 'Уручье · 3,8 м² · 16 дней', '9 800 BYN'], ['pk', 'Кухня с островом', 'Лошица · 12 м² · 4 недели', '21 000 BYN']], services: [['Санузел под ключ', 'Плитка, инсталляция, тёплый пол', 'от 5 200 BYN'], ['Укладка плитки', 'Включая крупный формат 60×120', 'от 45 BYN/м²'], ['Сантехника', 'Разводка, установка приборов', 'от 380 BYN']], rev: ['r3', 'r1'] },
+  { id: 'domkamen', name: 'Дом и Камень', ini: 'ДК', color: '#19C39B', owner: 'Виктор Дубовик', role: 'директор, инженер-строитель', av: 'viktor', legal: 'ООО', since: 2011, team: 26, district: 'Боровляны', dist: '9 км', rating: 4.7, reviews: 58, priceNum: 380, unit: 'м²', resp: 40, respRate: 92, onTime: 89, free: 'марта 2027', cats: ['found', 'roof', 'remont', 'win'], badges: ['УНП проверен', 'Аттестат соответствия', 'Гарантия 3 года'], desc: 'Частные дома под ключ: фундамент, коробка, кровля, фасад. Работаем по проекту, есть аттестат соответствия для строительных работ.', portfolio: [['pf', 'Дом из газосиликата', 'Боровляны · 160 м² · 4 месяца', '210 000 BYN'], ['pl', 'Мансарда под ключ', 'Колодищи · 60 м² · 2 месяца', '44 000 BYN']], services: [['Фундамент', 'Лента, плита, сваи', 'от 9 000 BYN'], ['Коробка дома', 'Газосиликат, кирпич', 'от 380 BYN/м²'], ['Кровля', 'Металлочерепица, мягкая кровля', 'от 55 BYN/м²']], rev: ['r4', 'r2'] },
+  { id: 'remontlab', name: 'Ремонт Лаб', ini: 'РЛ', color: '#FFC93C', owner: 'Яна Лис', role: 'дизайнер, руководитель проектов', av: 'yana', legal: 'ООО', since: 2020, team: 9, district: 'Центральный р-н', dist: '2,6 км', rating: 4.9, reviews: 41, priceNum: 290, unit: 'м²', resp: 15, respRate: 100, onTime: 90, free: '23 ноября', cats: ['remont', 'paint', 'win'], badges: ['УНП проверен', 'Дизайн-проект', 'Фото каждый день'], desc: 'Дизайнер и прораб в одной команде: проект, смета, ремонт и комплектация. Фиксируем цену после проекта.', portfolio: [['pl', 'Однушка в центре', 'Центральный · 38 м² · 2 месяца', '29 000 BYN'], ['pk', 'Кухня-гостиная', 'Новая Боровая · 26 м² · 7 недель', '34 000 BYN']], services: [['Дизайн-проект', 'Планировка, визуализации, ведомость', 'от 25 BYN/м²'], ['Ремонт под ключ', 'По нашему или вашему проекту', 'от 290 BYN/м²']], rev: ['r5', 'r1'] },
+  { id: 'elektra', name: 'Электра-М', ini: 'ЭМ', color: '#BFE3FF', owner: 'Олег Жук', role: 'ИП, электромонтажник', av: 'oleg', legal: 'ИП', since: 2016, team: 3, district: 'Первомайский р-н', dist: '4,1 км', rating: 4.8, reviews: 133, priceNum: 18, unit: 'точка', resp: 30, respRate: 97, onTime: 96, free: '12 ноября', cats: ['elec'], badges: ['УНП проверен', 'Акт скрытых работ', 'Гарантия 2 года'], desc: 'Электрика в квартирах и домах: замена проводки, щиты, умный дом. Схема разводки и акт скрытых работ в каждом проекте.', portfolio: [['pl', 'Проводка в двушке', 'Сухарево · 52 м² · 4 дня', '3 900 BYN']], services: [['Замена проводки', 'Квартира под ключ', 'от 45 BYN/м²'], ['Электроточка', 'Розетка, выключатель, штроба', 'от 18 BYN/точка'], ['Сборка щита', 'С УЗО и автоматами', 'от 320 BYN']], rev: ['r6'] },
+  { id: 'kroulya', name: 'Кровля Неман', ini: 'КН', color: '#FF8FB1', owner: 'Сергей Неман', role: 'ИП, кровельщик', av: 'sergey', legal: 'ИП', since: 2015, team: 6, district: 'Минский район', dist: '12 км', rating: 4.6, reviews: 37, priceNum: 48, unit: 'м²', resp: 90, respRate: 88, onTime: 92, free: 'апреля 2027', cats: ['roof', 'win', 'found'], badges: ['УНП проверен', 'Договор и акт', 'Гарантия 5 лет'], desc: 'Кровля частных домов и бань: монтаж, ремонт, утепление, водосток. Выезжаем по Минскому району.', portfolio: [['pf', 'Кровля дома 180 м²', 'Ждановичи · 3 недели', '17 800 BYN']], services: [['Монтаж кровли', 'Металлочерепица, профнастил', 'от 48 BYN/м²'], ['Ремонт кровли', 'Протечки, замена листов', 'от 300 BYN']], rev: ['r4'] }
+];
+const pro = id => PROS.find(p => p.id === id);
+const byn = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' BYN';
+const respTxt = m => m < 60 ? `~${m} мин` : `~${Math.round(m / 60)} ч`;
+const price = p => `от ${p.priceNum} BYN/${p.unit}`;
+const rating = r => r.toFixed(1).replace('.', ',');
+
+const QUOTES = [
+  { pro: 'maystar', total: 12400, weeks: 5, start: '16 ноября', warranty: '2 года', materials: 'черновые включены', pay: '4 этапа после приёмки', best: true },
+  { pro: 'sidorenko', total: 11300, weeks: 7, start: '2 декабря', warranty: '1 год', materials: 'отдельно, по чекам', pay: '50 % аванс, 50 % по сдаче' },
+  { pro: 'remontlab', total: 13600, weeks: 4, start: '23 ноября', warranty: '2 года', materials: 'все включены', pay: '3 этапа после приёмки' }
+];
+
+const STATE = {
+  search: { cat: 'remont', sort: 'rec', fast: false },
+  wiz: { step: 1, target: null, type: 'Ремонт под ключ', parts: { 'Ванная и санузел': true }, budget: '10–30 тыс. BYN', timing: 'Как можно скорее' },
+  chosen: 'maystar',
+  project: [
+    { t: 'Демонтаж и вывоз мусора', sum: 2400, due: '24.11.2026', st: 'accepted' },
+    { t: 'Электрика и сантехника (черновая)', sum: 3100, due: '05.12.2026', st: 'submitted', note: 'Разводка готова, акт скрытых работ и фото приложены' },
+    { t: 'Гидроизоляция и плитка', sum: 4200, due: '15.12.2026', st: 'planned' },
+    { t: 'Установка сантехники и уборка', sum: 2700, due: '21.12.2026', st: 'planned' }
+  ],
+  reviewed: false,
+  leads: [
+    { id: 'l1', type: 'Смета', when: '8 мин', title: 'Санузел 4,5 м² под ключ', where: 'Каменная Горка', budget: '10–30 тыс. BYN', start: 'Как можно скорее', obj: 'Панельный дом, 7 этаж', parts: 'Ванная, туалет', img: 'pb', client: 'Мария', av: 'maria', text: 'Хотим объединить ванную и туалет, поставить инсталляцию и душ без поддона. Дом 1986 года, трубы ещё родные.', status: 'new' },
+    { id: 'l2', type: 'Смета', when: '1 ч', title: 'Кухня-гостиная, 54 м²', where: 'Уручье', budget: '30–100 тыс. BYN', start: 'В течение месяца', obj: 'Вторичка, 3 этаж', parts: 'Кухня, гостиная', img: 'pk', client: 'Иван', av: 'ivan', text: 'Нужно снести перегородку между кухней и комнатой. Нужна помощь с согласованием перепланировки.', status: 'new' },
+    { id: 'l3', type: 'Звонок', when: '3 ч', title: 'Ремонт однушки после покупки', where: 'Лошица', budget: 'Пока не знаю', start: 'Через 2–3 месяца', obj: 'Новостройка, черновая отделка', parts: 'Вся квартира', img: 'pl', client: 'Кацярына', av: 'katya', text: 'Квартира в новостройке без отделки, 41 м². Хочу понять порядок цен и сроки.', status: 'new' },
+    { id: 'l4', type: 'Рядом с вами', when: 'вчера', title: 'Отделка фасада дома', where: 'Колодищи', budget: 'больше 100 тыс. BYN', start: 'Сроки гибкие', obj: 'Частный дом, 2 этажа', parts: 'Фасад', img: 'pf', client: 'Дмитрий', av: 'dmitry', text: 'Утепление и декоративная штукатурка, 220 м² фасада.', status: 'quoted' }
+  ],
+  lead: 'l1'
+};
+
+const app = document.getElementById('app');
+const modalEl = document.getElementById('modal');
+const toastEl = document.getElementById('toast');
+let toastTimer;
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800); }
+function openModal(html) { modalEl.innerHTML = `<div class="modal-bg" data-act="closeBg"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`; }
+function closeModal() { modalEl.innerHTML = ''; }
+
+const avImg = (k, s, alt) => `<img class="av" src="${AV[k]}" width="${s}" height="${s}" style="width:${s}px;height:${s}px" alt="${alt || ''}">`;
+const logo = (p, s, r) => `<span class="logo disp" style="width:${s}px;height:${s}px;border-radius:${r || s / 3}px;background:${p.color};font-size:${Math.round(s / 3)}px">${p.ini}</span>`;
+const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+const blobs = (a, b, c) => `<div class="dots" style="opacity:.6"></div><div class="blob" style="width:520px;height:520px;background:${a};left:-160px;top:-200px"></div><div class="blob" style="width:480px;height:480px;background:${b};right:-120px;top:120px;animation-delay:-6s"></div>${c ? `<div class="blob" style="width:380px;height:380px;background:${c};left:40%;bottom:-200px;animation-delay:-11s"></div>` : ''}`;
+
+/* ---------- Главная ---------- */
+function home() {
+  const tick = ['Ремонт под ключ', 'Санузлы', 'Кровля', 'Фундамент', 'Электрика', 'Окна', 'Фасады', 'Дизайн-проект'];
+  const top = PROS.slice(0, 3);
+  return `
+  <section style="overflow:hidden">${blobs('#FF5A1F', '#6C4BFF', '#FFC93C')}
+    <div class="wrap hero" style="position:relative;display:flex;gap:48px;align-items:center;padding-top:56px;padding-bottom:88px">
+      <div class="rise" style="flex:1 1 560px;min-width:0">
+        <span class="eyebrow" style="background:#fff"><span style="color:var(--orange)">★</span> 4,9 — средняя оценка бригад в Минске</span>
+        <h1 class="disp" style="margin-top:26px;font-size:clamp(38px,5.4vw,64px);line-height:1.05;font-weight:800">Стройка и&nbsp;ремонт <span style="display:inline-block;background:var(--yellow);border:3px solid var(--ink);border-radius:20px;padding:2px 16px 8px;transform:rotate(-2deg);box-shadow:5px 5px 0 var(--ink)">без лотереи</span></h1>
+        <p class="muted" style="margin:24px 0 0;max-width:540px;font-size:18px;line-height:1.6">Опишите задачу один раз — проверенные бригады пришлют сметы, сроки и примеры работ. Сравниваете в одной таблице, договор и приёмка этапов — в сервисе.</p>
+        <form class="search-form" data-form="search" style="margin-top:32px;display:flex;align-items:stretch;background:#fff;border:2px solid var(--ink);border-radius:28px;box-shadow:6px 6px 0 var(--ink);padding:8px;max-width:640px">
+          <label class="field" style="flex:1.3;padding:8px 16px;font-size:12px">ЧТО НУЖНО СДЕЛАТЬ<input name="q" value="Ремонт ванной под ключ" style="border:0;padding:4px 0 0;border-radius:0;outline:0"></label>
+          <div class="sep" style="width:2px;background:var(--line);margin:10px 0"></div>
+          <label class="field" style="flex:1;padding:8px 16px;font-size:12px">ГДЕ ОБЪЕКТ<input name="where" value="Минск, Фрунзенский р-н" style="border:0;padding:4px 0 0;border-radius:0;outline:0"></label>
+          <button class="btn o" style="box-shadow:none;border-radius:20px">Найти</button>
+        </form>
+        <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <span class="muted" style="font-size:14px;font-weight:700">Часто ищут:</span>
+          <a class="chip" href="#/search?cat=bath">Санузел</a><a class="chip" href="#/search?cat=remont">Ремонт однушки</a><a class="chip" href="#/search?cat=roof">Крыша дачи</a><a class="chip" href="#/search?cat=elec">Проводка</a>
+        </div>
+        <div style="margin-top:36px;display:flex;flex-wrap:wrap;gap:36px">
+          <div><div class="disp" style="font-size:28px;font-weight:800">3 800</div><div class="muted" style="font-size:14px;font-weight:600">проверенных мастеров</div></div>
+          <div><div class="disp" style="font-size:28px;font-weight:800">38 мин</div><div class="muted" style="font-size:14px;font-weight:600">средний первый ответ</div></div>
+          <div><div class="disp" style="font-size:28px;font-weight:800">до 5 смет</div><div class="muted" style="font-size:14px;font-weight:600">на одну заявку</div></div>
+        </div>
+      </div>
+      <div class="rise hero-art" style="position:relative;flex:0 0 520px;height:560px;animation-delay:.15s">
+        <div style="position:absolute;inset:30px 0 0 30px;background:var(--violet);border:3px solid var(--ink);border-radius:44px;box-shadow:10px 10px 0 var(--ink);overflow:hidden">
+          <div class="spin" style="position:absolute;left:50%;top:48%;width:900px;height:900px;margin:-450px 0 0 -450px;background:repeating-conic-gradient(rgba(255,255,255,.1) 0 10deg,transparent 10deg 20deg)"></div>
+          <img src="${IMG.hero}" alt="Иллюстрация: дом на стройке с краном" style="position:absolute;left:0;right:0;bottom:-8px;width:100%">
+        </div>
+        <a href="#/compare" class="float card" style="--r:-5deg;position:absolute;left:-12px;top:70px;box-shadow:5px 5px 0 var(--ink);padding:14px 18px;width:230px;display:flex;gap:12px;align-items:center">
+          ${avImg('ales', 46)}
+          <div><div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--orange-t)"><span class="ping" style="background:var(--orange)"></span>Новая смета</div>
+          <div class="disp" style="margin-top:4px;font-size:20px;font-weight:800">12 400 BYN</div>
+          <div class="muted" style="font-size:12px;font-weight:600">Санузел 4,5 м² · 5 недель</div></div>
+        </a>
+        <div class="float2" style="--r:4deg;position:absolute;right:-8px;bottom:36px;background:var(--yellow);border:2px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:12px 16px;display:flex;gap:10px;align-items:center">
+          <div style="display:flex">${avImg('hanna', 34)}<span style="margin-left:-10px">${avImg('ksenia', 34)}</span><span style="margin-left:-10px">${avImg('dmitry', 34)}</span></div>
+          <div><div class="disp" style="font-size:18px;font-weight:800">★ 4,9</div><div style="font-size:12px;font-weight:700">212 отзывов по договорам</div></div>
+        </div>
+        <div class="hide-m" style="position:absolute;right:-24px;top:-6px;width:130px;height:130px">
+          <svg class="spin" viewBox="0 0 140 140" width="130" height="130" aria-hidden="true"><defs><path id="circ" d="M70 70m-52 0a52 52 0 1 1 104 0a52 52 0 1 1-104 0"/></defs><circle cx="70" cy="70" r="68" fill="#FFF4E8" stroke="#17132B" stroke-width="2"/><text font-family="Unbounded,sans-serif" font-size="11.5" font-weight="700" letter-spacing="2" fill="#17132B"><textPath href="#circ">ПРОВЕРЕНО • ДОГОВОР • ГАРАНТИЯ •</textPath></text></svg>
+          <div style="position:absolute;inset:41px;border-radius:50%;background:var(--mint);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#17132B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div style="background:var(--ink);color:var(--cream);transform:rotate(-1.5deg);margin:0 -40px;padding:20px 0;overflow:hidden">
+    <div class="marq disp" style="font-size:26px;font-weight:700">${tick.concat(tick).map(t => `<span style="display:flex;align-items:center;gap:44px">${t}<span style="color:var(--yellow)">✦</span></span>`).join('')}</div>
+  </div>
+  <section class="wrap" style="padding-top:96px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
+      <div><span class="eyebrow" style="background:var(--pink)">Категории</span><h2 class="disp h2" style="margin-top:16px">Что будем строить?</h2></div>
+      <a href="#/search" class="btn">Все категории →</a>
+    </div>
+    <div class="grid4" style="margin-top:36px">
+      ${CATS.map(c => `<a href="#/search?cat=${c.id}" class="pop" style="display:flex;flex-direction:column;background:${c.bg};border:2px solid var(--ink);border-radius:26px;padding:18px 20px 20px">
+        <img src="${IMG[c.img]}" alt="" style="height:110px;width:100%;object-fit:contain">
+        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div><div style="font-size:17px;font-weight:800">${c.name}</div><div class="muted" style="margin-top:3px;font-size:13px;font-weight:600">${c.count}</div></div>
+          <span style="flex:0 0 38px;height:38px;border-radius:50%;background:#fff;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:800">→</span>
+        </div></a>`).join('')}
+    </div>
+  </section>
+  <section class="wrap" id="how" style="padding-top:100px">
+    <div style="text-align:center"><span class="eyebrow" style="background:var(--sky)">Как это работает</span><h2 class="disp h2" style="margin-top:16px">Три шага до нормального ремонта</h2></div>
+    <div class="grid3" style="margin-top:40px">
+      ${[['1', '#FFC93C', 'Опишите задачу', 'Пять коротких вопросов: что делаем, площадь, адрес, бюджет и сроки.', '#/request'], ['2', '#FF8FB1', 'Сравните сметы', 'До пяти проверенных бригад ответят сметой в одном формате.', '#/compare'], ['3', '#19C39B', 'Работайте по договору', 'Этапы и приёмка в сервисе: вы принимаете — бригада получает оплату.', '#/project']].map(s => `
+      <a href="${s[4]}" class="card pop" style="position:relative;padding:30px;overflow:hidden;border-radius:30px">
+        <div style="position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:${s[1]};opacity:.35"></div>
+        <div class="disp" style="position:relative;width:60px;height:60px;border-radius:18px;background:${s[1]};border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;box-shadow:4px 4px 0 var(--ink)">${s[0]}</div>
+        <h3 class="disp" style="position:relative;margin-top:24px;font-size:21px;font-weight:700">${s[2]}</h3>
+        <p class="muted" style="position:relative;margin:10px 0 0;font-size:16px;line-height:1.6">${s[3]}</p>
+        <div style="position:relative;margin-top:16px;font-weight:800">Посмотреть →</div></a>`).join('')}
+    </div>
+  </section>
+  <section class="wrap" style="padding-top:100px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
+      <div><span class="eyebrow" style="background:var(--mint)">Лучшие в Минске</span><h2 class="disp h2" style="margin-top:16px">Бригады с отзывами по договорам</h2></div>
+      <a href="#/search" class="btn">Смотреть все →</a>
+    </div>
+    <div class="grid3" style="margin-top:36px">
+      ${top.map(p => `<a href="#/pro/${p.id}" class="card pop" style="overflow:hidden;border-radius:28px">
+        <div style="position:relative;height:180px;border-bottom:2px solid var(--ink);overflow:hidden"><img src="${IMG[p.portfolio[0][0]]}" alt="" style="width:100%;height:100%;object-fit:cover"><span class="tag star" style="position:absolute;left:12px;top:12px">★ ${rating(p.rating)}</span></div>
+        <div style="padding:18px;display:flex;gap:12px;align-items:center">${avImg(p.av, 52, p.owner)}<div style="min-width:0"><div style="font-size:17px;font-weight:800">${p.name}</div><div class="muted" style="font-size:13px;font-weight:600">${p.owner} · ${p.district}</div></div></div>
+        <div style="padding:0 18px 18px;display:flex;justify-content:space-between;font-size:14px;font-weight:700"><span>${price(p)}</span><span class="muted">ответ ${respTxt(p.resp)}</span></div></a>`).join('')}
+    </div>
+  </section>
+  <section class="wrap" style="padding-top:100px">
+    <div style="position:relative;background:var(--orange);border:3px solid var(--ink);border-radius:44px;box-shadow:12px 12px 0 var(--ink);overflow:hidden;display:flex;flex-wrap:wrap;gap:40px;align-items:center;padding:clamp(28px,5vw,56px)">
+      <div class="dots" style="opacity:.35"></div>
+      <div style="position:relative;flex:1 1 380px">
+        <span class="eyebrow" style="background:#fff">Для подрядчиков и бригад</span>
+        <h2 class="disp h2" style="margin-top:18px">Заявки с бюджетом, а&nbsp;не звонки в&nbsp;пустоту</h2>
+        <p style="margin:18px 0 0;max-width:520px;font-size:17px;line-height:1.6;font-weight:600">Клиент заранее указывает площадь, адрес, бюджет и сроки. Вы отвечаете сметой в пару кликов и собираете отзывы по договорам.</p>
+        <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:12px"><a href="#/cabinet" class="btn d" style="box-shadow:4px 4px 0 #fff">Открыть кабинет</a><a href="#/pro/maystar" class="btn">Пример профиля</a></div>
+      </div>
+      <a href="#/cabinet" class="float card" style="--r:3deg;position:relative;flex:0 1 340px;box-shadow:6px 6px 0 var(--ink);padding:22px">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800"><span style="display:flex;align-items:center;gap:8px;color:var(--orange-t)"><span class="ping" style="background:var(--orange)"></span>Новая заявка</span><span class="muted">8 мин назад</span></div>
+        <div style="margin-top:12px;display:flex;gap:10px;align-items:center">${avImg('maria', 40)}<div class="disp" style="font-size:17px;font-weight:700;line-height:1.25">Санузел 4,5 м² под ключ</div></div>
+        <img src="${IMG.pb}" alt="" style="margin-top:12px;width:100%;height:120px;object-fit:cover;border:2px solid var(--ink);border-radius:16px">
+        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px"><span class="tag" style="background:var(--yellow)">10–30 тыс. BYN</span><span class="tag" style="background:var(--sky)">Как можно скорее</span><span class="tag" style="background:#D3F5EA">Каменная Горка</span></div>
+      </a>
+    </div>
+  </section>`;
+}
+
+/* ---------- Поиск ---------- */
+function search(q) {
+  const S = STATE.search;
+  if (q.get('cat')) S.cat = q.get('cat');
+  const cat = CATS.find(c => c.id === S.cat) || CATS[0];
+  let list = PROS.filter(p => p.cats.includes(cat.id));
+  if (S.fast) list = list.filter(p => p.resp <= 60);
+  const sorts = { rec: (a, b) => b.rating * Math.log(b.reviews) - a.rating * Math.log(a.reviews), rating: (a, b) => b.rating - a.rating, price: (a, b) => a.priceNum - b.priceNum, resp: (a, b) => a.resp - b.resp };
+  list = list.slice().sort(sorts[S.sort]);
+  return `
+  <section style="overflow:hidden;border-bottom:2px solid var(--ink)">${blobs('#FFC93C', '#FF8FB1')}
+    <div class="wrap rise" style="position:relative;padding-top:32px;padding-bottom:30px">
+      <div class="muted" style="font-size:14px;font-weight:700"><a href="#/">Главная</a> / ${cat.name} / Минск</div>
+      <h1 class="disp" style="margin-top:12px;font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.15">${cat.name} в Минске <span style="display:inline-block;background:var(--mint);border:2px solid var(--ink);border-radius:16px;padding:2px 12px 6px;font-size:.6em;vertical-align:middle;transform:rotate(-3deg)">${list.length} ${list.length === 1 ? 'бригада' : list.length < 5 ? 'бригады' : 'бригад'} в прототипе</span></h1>
+      <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:8px">
+        ${CATS.map(c => `<button class="chip ${c.id === cat.id ? 'on' : ''}" data-act="cat" data-v="${c.id}">${c.name}</button>`).join('')}
+      </div>
+    </div>
+  </section>
+  <div class="wrap row" style="padding-top:28px">
+    <main style="flex:1;min-width:0;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;font-weight:700">
+        <span class="muted">Сортировка:</span>
+        ${[['rec', 'Рекомендуемые'], ['rating', 'Рейтинг'], ['price', 'Цена'], ['resp', 'Быстрый ответ']].map(s => `<button class="chip ${S.sort === s[0] ? 'on' : ''}" data-act="sort" data-v="${s[0]}">${s[1]}</button>`).join('')}
+        <button class="chip ${S.fast ? 'on' : ''}" data-act="fast" style="margin-left:auto">⚡ Отвечают за час</button>
+      </div>
+      ${list.length ? list.map(p => `
+      <article class="card pop rise" style="padding:22px;display:flex;gap:18px;flex-wrap:wrap">
+        <a href="#/pro/${p.id}" style="position:relative;flex:0 0 76px;height:76px">${avImg(p.av, 76, p.owner)}<span style="position:absolute;right:-6px;bottom:-6px">${logo(p, 32, 10)}</span></a>
+        <div style="flex:1;min-width:240px">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px">
+            <div><a href="#/pro/${p.id}" class="disp" style="font-size:20px;font-weight:700">${p.name}</a>
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700"><span class="tag star">★ ${rating(p.rating)}</span><span class="muted">${p.reviews} отзывов · ${p.owner} · ${p.district}</span></div></div>
+            <div style="text-align:right"><div class="disp" style="font-size:19px;font-weight:800">${price(p)}</div><div class="muted" style="font-size:13px;font-weight:600">${p.dist} от вас</div></div>
+          </div>
+          <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">${p.badges.map(b => `<span class="tag ok">✓ ${b}</span>`).join('')}</div>
+          <p class="muted" style="margin:10px 0 0;font-size:15px;line-height:1.55">«${REVIEWS[p.rev[0]].text.split('.')[0]}.» — ${REVIEWS[p.rev[0]].who}</p>
+          <div style="margin-top:12px;display:flex;gap:8px;overflow:hidden">${p.portfolio.slice(0, 3).map(x => `<img src="${IMG[x[0]]}" alt="${x[1]}" style="width:104px;height:74px;object-fit:cover;border:2px solid var(--ink);border-radius:12px">`).join('')}</div>
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+            <span style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700"><span class="ping" style="background:var(--mint)"></span>Отвечает ${respTxt(p.resp)}</span>
+            <a href="#/pro/${p.id}" class="btn sm" style="margin-left:auto">Профиль</a>
+            <a href="#/request/${p.id}" class="btn sm o">Запросить смету</a>
+          </div>
+        </div>
+      </article>`).join('') : `<div class="card" style="padding:32px;text-align:center"><div class="disp" style="font-size:20px;font-weight:700">Никого не нашли</div><p class="muted">Снимите фильтр «Отвечают за час».</p></div>`}
+      <div style="position:relative;overflow:hidden;background:var(--violet);color:var(--cream);border:2px solid var(--ink);border-radius:30px;box-shadow:6px 6px 0 var(--ink);padding:26px;display:flex;flex-wrap:wrap;gap:20px;align-items:center">
+        <div class="dots" style="opacity:.25"></div>
+        <img src="${IMG.kitchen}" alt="" class="float" style="position:relative;width:130px">
+        <div style="position:relative;flex:1 1 240px"><div class="disp" style="font-size:22px;font-weight:700">Не хотите выбирать сами?</div><div style="margin-top:6px;font-size:15px;line-height:1.55;color:#E3DCFF">Одна заявка — до пяти бригад пришлют сметы в одном формате.</div></div>
+        <a href="#/request" class="btn y" style="position:relative">Одна заявка — 5 смет</a>
+      </div>
+    </main>
+    <aside class="side hide-m" style="height:640px;border:2px solid var(--ink);border-radius:30px;overflow:hidden;box-shadow:6px 6px 0 var(--ink);padding:0;gap:0">
+      <div style="position:relative;height:100%">
+        <img src="${IMG.map}" alt="Карта Минска с бригадами" style="width:100%;height:100%;object-fit:cover">
+        <span class="chip" style="position:absolute;left:16px;top:16px;font-size:13px">Минск · ${list.length} на карте</span>
+        ${list[0] ? `<a href="#/pro/${list[0].id}" class="card float" style="position:absolute;left:16px;right:16px;bottom:16px;padding:14px;display:flex;gap:12px;align-items:center">${avImg(list[0].av, 52)}<div style="flex:1;min-width:0"><div style="font-weight:800">${list[0].name}</div><div class="muted" style="font-size:13px;font-weight:600">★ ${rating(list[0].rating)} · ${list[0].dist} от вас</div></div><span class="disp" style="font-weight:800">→</span></a>` : ''}
+      </div>
+    </aside>
+  </div>`;
+}
+
+/* ---------- Профиль ---------- */
+function profile(id) {
+  const p = pro(id) || PROS[0];
+  const revs = p.rev.map(r => REVIEWS[r]);
+  const dist = [[5, 88], [4, 9], [3, 2], [2, 1], [1, 0]];
+  return `
+  <section style="overflow:hidden;background:var(--yellow);border-bottom:3px solid var(--ink)">${blobs('#FF5A1F', '#FF8FB1')}
+    <div class="wrap rise" style="position:relative;padding-top:28px;padding-bottom:52px">
+      <a href="#/search" style="font-size:14px;font-weight:800">← Назад к поиску</a>
+      <div style="margin-top:22px;display:flex;flex-wrap:wrap;gap:32px;align-items:center">
+        <div style="position:relative;flex:0 0 140px;height:140px">${avImg(p.av, 140, p.owner)}<span style="position:absolute;right:-8px;bottom:-4px">${logo(p, 50, 16)}</span></div>
+        <div style="flex:1 1 380px;min-width:0">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;font-weight:800"><span style="background:var(--ink);color:var(--cream);border-radius:999px;padding:5px 12px">Проверенный подрядчик</span><span>${p.legal} · с ${p.since} года · ${p.team} человек</span></div>
+          <h1 class="disp" style="margin-top:12px;font-size:clamp(32px,5vw,50px);font-weight:800;line-height:1.05">${p.name}</h1>
+          <div style="margin-top:8px;font-size:16px;font-weight:700">${p.owner}, ${p.role}</div>
+          <p style="margin:10px 0 0;font-size:17px;font-weight:600;max-width:600px;line-height:1.55">${p.desc}</p>
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px">
+            <span class="tag star" style="font-size:14px">★ ${rating(p.rating)} · ${p.reviews} отзывов</span>
+            ${p.badges.map(b => `<span class="tag" style="background:#fff;border:2px solid var(--ink);font-size:13px">✓ ${b}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="wrap row" style="padding-top:40px">
+    <main style="flex:1;min-width:0;display:flex;flex-direction:column;gap:48px">
+      <section><h2 class="disp" style="font-size:26px;font-weight:800">Портфолио</h2>
+        <div class="grid2" style="margin-top:18px">${p.portfolio.map(x => `<div class="card pop" style="overflow:hidden"><img src="${IMG[x[0]]}" alt="${x[1]}" style="width:100%;height:220px;object-fit:cover;border-bottom:2px solid var(--ink)"><div style="padding:14px 18px;display:flex;justify-content:space-between;gap:10px"><div><div style="font-weight:800">${x[1]}</div><div class="muted" style="font-size:13px;font-weight:600;margin-top:3px">${x[2]}</div></div><span class="tag" style="align-self:flex-start;background:var(--yellow);border:2px solid var(--ink)">${x[3]}</span></div></div>`).join('')}</div>
+      </section>
+      <section><h2 class="disp" style="font-size:26px;font-weight:800">Услуги и цены</h2>
+        <div class="card" style="margin-top:18px;overflow:hidden">${p.services.map(s => `<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:16px 22px;border-bottom:2px solid var(--line)"><div><div style="font-weight:800">${s[0]}</div><div class="muted" style="font-size:14px;font-weight:600;margin-top:2px">${s[1]}</div></div><div class="disp" style="font-weight:700">${s[2]}</div></div>`).join('')}</div>
+      </section>
+      <section><h2 class="disp" style="font-size:26px;font-weight:800">Отзывы по договорам</h2>
+        <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;background:var(--violet);color:var(--cream);border:2px solid var(--ink);border-radius:28px;box-shadow:6px 6px 0 var(--ink);padding:24px">
+          <div style="text-align:center;flex:0 0 140px"><div class="disp" style="font-size:56px;font-weight:800;line-height:1">${rating(p.rating)}</div><div style="color:var(--yellow);font-size:20px;margin-top:6px">★★★★★</div><div style="font-size:13px;font-weight:700;margin-top:4px;color:#E3DCFF">${p.reviews} отзывов</div></div>
+          <div style="flex:1 1 220px;display:flex;flex-direction:column;gap:8px">${dist.map(d => `<div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800"><span style="width:12px">${d[0]}</span><div style="flex:1;height:10px;border-radius:5px;background:rgba(255,255,255,.2);overflow:hidden"><div class="bar" style="height:10px;border-radius:5px;background:var(--yellow);width:${d[1]}%"></div></div><span style="width:34px;text-align:right">${d[1]}%</span></div>`).join('')}</div>
+        </div>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:16px">${revs.map(r => `
+          <div class="card" style="padding:22px">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">${avImg(r.av, 48, r.who)}<div style="flex:1;min-width:180px"><div style="font-weight:800">${r.who}</div><div class="muted" style="font-size:13px;font-weight:600">${r.meta}</div></div><span class="tag ok">✓ Проект подтверждён</span></div>
+            <div style="margin-top:10px;color:var(--orange);font-size:18px">${stars(r.stars)}</div>
+            <p style="margin:6px 0 0;font-size:16px;line-height:1.6">${r.text}</p>
+            <div style="margin-top:14px;padding:14px 16px;border-radius:18px;background:var(--cream);border-left:5px solid var(--orange);display:flex;gap:10px;align-items:flex-start">${avImg(p.av, 32)}<div style="font-size:15px;line-height:1.5"><b>${p.owner}:</b> ${r.reply}</div></div>
+          </div>`).join('')}</div>
+      </section>
+    </main>
+    <aside class="side">
+      <div class="card" style="border-width:3px;border-radius:30px;box-shadow:8px 8px 0 var(--ink);overflow:hidden">
+        <div style="position:relative;background:var(--orange);padding:22px;border-bottom:3px solid var(--ink)"><div class="disp" style="font-size:22px;font-weight:800">Запросить смету</div><div style="margin-top:4px;font-size:14px;font-weight:700">Бесплатно и без звонков с незнакомых номеров</div></div>
+        <div style="padding:22px;display:flex;flex-direction:column;gap:14px">
+          ${[['Время ответа', respTxt(p.resp), Math.max(20, 100 - p.resp / 2), '#19C39B'], ['Отвечают на заявки', p.respRate + '%', p.respRate, '#6C4BFF'], ['Сдают в срок', p.onTime + '%', p.onTime, '#FF5A1F']].map(k => `<div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700"><span class="muted">${k[0]}</span><b>${k[1]}</b></div><div style="margin-top:6px;height:10px;border-radius:5px;background:#F1EADF;overflow:hidden"><div class="bar" style="height:10px;border-radius:5px;background:${k[3]};width:${k[2]}%"></div></div></div>`).join('')}
+          <div style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800"><span class="ping" style="background:var(--mint)"></span>Свободны с ${p.free}</div>
+          <a href="#/request/${p.id}" class="btn o">Запросить смету</a>
+          <button class="btn" data-act="toast" data-v="Чат откроется после первой заявки — в прототипе он не подключён">Написать в чат</button>
+        </div>
+      </div>
+      <div class="card" style="background:#D3F5EA;padding:20px;display:flex;gap:14px;align-items:center"><img src="${IMG.window}" alt="" style="width:64px"><div><div style="font-weight:800">Приёмка по этапам</div><div style="margin-top:4px;font-size:14px;line-height:1.5;font-weight:600;color:var(--mint-t)">Каждый этап закрывается актом после вашей проверки.</div></div></div>
+      <div class="card" style="padding:20px;font-size:14px;line-height:1.9;font-weight:600"><div class="disp" style="font-size:15px;font-weight:700;margin-bottom:4px">Проверено Подрядом</div>✓ Паспорт руководителя<br>✓ ${p.legal} «${p.name}», УНП и статус в ЕГР<br>✓ Типовой договор и акт приёмки${p.badges.includes('Аттестат соответствия') ? '<br>✓ Аттестат соответствия' : ''}</div>
+    </aside>
+  </div>`;
+}
+
+/* ---------- Мастер заявки ---------- */
+const W_TYPES = [['Ремонт под ключ', '🔑'], ['Косметический ремонт', '🎨'], ['Капремонт и перепланировка', '🧱'], ['Дом, баня или пристройка', '🏡'], ['Дизайн-проект', '📐']];
+const W_PARTS = [['Кухня', '🍳'], ['Ванная и санузел', '🛁'], ['Спальня', '🛏'], ['Гостиная', '🛋'], ['Прихожая', '🚪'], ['Детская', '🧸'], ['Балкон', '🪴'], ['Вся квартира', '🏢']];
+const W_BUDGETS = ['до 10 тыс. BYN', '10–30 тыс. BYN', '30–100 тыс. BYN', 'больше 100 тыс. BYN', 'Пока не знаю'];
+const W_TIMING = [['Как можно скорее', '⚡'], ['В течение месяца', '📅'], ['Через 2–3 месяца', '🗓'], ['Сроки гибкие', '🤝']];
+function wizard(target) {
+  const W = STATE.wiz;
+  if (target !== undefined && target !== W._t) { W._t = target; W.target = target || null; W.step = 1; }
+  const tp = W.target && pro(W.target);
+  const step = W.step;
+  const opt = (label, ico, on, act) => `<button type="button" class="opt ${on ? 'on' : ''}" data-act="${act}" data-v="${label}">${ico ? `<span style="font-size:20px">${ico}</span>` : ''}${label}</button>`;
+  let body = '';
+  if (step === 1) body = `<h2 class="disp" style="font-size:26px;font-weight:800">Какие работы нужны?</h2><div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">${W_TYPES.map(o => opt(o[0], o[1], W.type === o[0], 'wtype')).join('')}</div>`;
+  if (step === 2) body = `<h2 class="disp" style="font-size:26px;font-weight:800">Что именно делаем?</h2><p class="muted" style="margin:6px 0 18px;font-weight:600">Можно выбрать несколько.</p><div class="grid2" style="gap:10px">${W_PARTS.map(o => opt(o[0], o[1], !!W.parts[o[0]], 'wpart')).join('')}</div>`;
+  if (step === 3) body = `<h2 class="disp" style="font-size:26px;font-weight:800">Площадь, адрес и бюджет</h2>
+    <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:12px"><label class="field" style="flex:1 1 140px">Площадь, м²<input placeholder="например, 4,5" value="4,5"></label><label class="field" style="flex:2 1 240px">Адрес объекта<input placeholder="Город, улица" value="Минск, ул. Притыцкого"></label></div>
+    <div class="field" style="margin-top:18px">Бюджет</div><div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px">${W_BUDGETS.map(b => `<button type="button" class="chip ${W.budget === b ? 'on' : ''}" data-act="wbudget" data-v="${b}">${b}</button>`).join('')}</div>
+    <label class="field" style="margin-top:18px">Подробности (необязательно)<textarea rows="3" placeholder="Этаж, лифт, год дома…">Объединить ванную и туалет, душ без поддона. Дом 1986 года.</textarea></label>`;
+  if (step === 4) body = `<h2 class="disp" style="font-size:26px;font-weight:800">Когда начинаем?</h2><div class="grid2" style="margin-top:20px;gap:10px">${W_TIMING.map(o => opt(o[0], o[1], W.timing === o[0], 'wtiming')).join('')}</div>
+    <button type="button" data-act="toast" data-v="Фото добавлено (в прототипе файл не загружается)" style="margin-top:18px;width:100%;border:2px dashed var(--ink);border-radius:22px;padding:18px;display:flex;align-items:center;gap:16px;background:#FFF0C2;cursor:pointer;text-align:left"><img src="${IMG.pb}" alt="" style="width:92px;height:64px;object-fit:cover;border:2px solid var(--ink);border-radius:12px;transform:rotate(-4deg)"><span><b style="font-size:16px">Добавьте фото или план</b><br><span class="muted" style="font-size:14px;font-weight:600">Смета будет точнее</span></span></button>`;
+  if (step === 5) body = `<h2 class="disp" style="font-size:26px;font-weight:800">Как с вами связаться?</h2><p class="muted" style="margin:6px 0 18px;font-weight:600">Контакты увидят только бригады, которым уйдёт заявка.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px"><label class="field" style="flex:1 1 200px">Имя<input value="Мария"></label><label class="field" style="flex:1 1 200px">Телефон<input value="+375 (29) 000-00-00" inputmode="tel"></label></div>
+    <label style="margin-top:16px;display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:18px;background:#D3F5EA;border:2px solid var(--ink);font-weight:700;cursor:pointer"><input type="checkbox" checked style="accent-color:#6C4BFF;width:20px;height:20px">${tp ? `Отправить также ещё 4 проверенным бригадам рядом` : 'Отправить 5 проверенным бригадам рядом'}</label>
+    <p class="muted" style="font-size:13px;line-height:1.5;margin:14px 0 0">Нажимая «Отправить», вы соглашаетесь на обработку персональных данных по Закону РБ № 99-З (в прототипе ничего не отправляется).</p>`;
+  if (step === 6) body = `<div style="position:relative;min-height:420px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+      ${['#FF5A1F', '#FFC93C', '#6C4BFF', '#19C39B', '#FF8FB1'].map((c, i) => `<span class="cf" style="left:${8 + i * 19}%;background:${c};animation-delay:-${i * .5}s;${i % 2 ? 'border-radius:50%' : ''}"></span>`).join('')}
+      <div style="width:84px;height:84px;border-radius:26px;background:var(--mint);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);display:flex;align-items:center;justify-content:center" class="rise"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#17132B" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></div>
+      <h2 class="disp" style="font-size:32px;font-weight:800">Заявка отправлена!</h2>
+      <p class="muted" style="margin:0;font-size:17px;line-height:1.6;font-weight:600;max-width:500px">${tp ? tp.name + ' и ещё 4 бригады' : '5 бригад'} получили заявку. В прототипе три сметы уже пришли — сравните их.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><a href="#/compare" class="btn o">Сравнить 3 сметы →</a><button class="btn" data-act="wrestart">Заполнить заново</button></div></div>`;
+  return `
+  <div class="wrap" style="padding-top:28px">
+    <div style="display:flex;flex-wrap:wrap;border:3px solid var(--ink);border-radius:36px;overflow:hidden;box-shadow:10px 10px 0 var(--ink);background:var(--cream)">
+      <div style="position:relative;flex:1 1 320px;background:var(--violet);color:var(--cream);overflow:hidden;padding:32px;display:flex;flex-direction:column;min-height:300px">
+        <div class="dots" style="background-image:radial-gradient(rgba(255,255,255,.22) 1.5px,transparent 1.6px)"></div>
+        <div class="blob" style="width:280px;height:280px;background:#FF5A1F;right:-120px;top:-80px;opacity:.6"></div>
+        ${tp ? `<div style="position:relative;display:flex;gap:12px;align-items:center">${avImg(tp.av, 52)}<div><div style="font-weight:800">${tp.name}</div><div style="font-size:13px;color:#E3DCFF">отвечает ${respTxt(tp.resp)}</div></div></div>` : `<span style="position:relative;align-self:flex-start;background:var(--yellow);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800">До 5 бригад</span>`}
+        <div class="disp" style="position:relative;margin-top:18px;font-size:30px;line-height:1.12;font-weight:800">Заявка на смету</div>
+        <div style="position:relative;margin-top:10px;font-size:15px;line-height:1.55;color:#E3DCFF">Пара минут — и сметы в пути.</div>
+        <img src="${IMG.hero}" alt="" style="position:relative;margin-top:auto;width:100%;max-width:440px">
+      </div>
+      <div style="flex:2 1 420px;min-width:0;padding:32px clamp(20px,4vw,48px);display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:14px"><div style="flex:1;height:14px;border:2px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden"><div style="height:100%;background:var(--orange);border-right:2px solid var(--ink);width:${Math.min(step, 5) * 20}%;transition:width .5s"></div></div><div class="disp" style="font-size:13px;font-weight:700">${step < 6 ? `Шаг ${step} из 5` : 'Готово'}</div></div>
+        <div class="rise" style="flex:1;margin-top:26px" key="${step}">${body}</div>
+        ${step < 6 ? `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:2px solid var(--line)"><button class="btn sm" data-act="wback" style="box-shadow:none;border-color:transparent;background:transparent;${step === 1 ? 'opacity:.3' : ''}">← Назад</button><button class="btn o" data-act="wnext">${step === 5 ? 'Отправить заявку' : 'Дальше →'}</button></div>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- Сравнение смет ---------- */
+function compare() {
+  const best = Math.min(...QUOTES.map(q => q.total)), fast = Math.min(...QUOTES.map(q => q.weeks));
+  const rowsDef = [['Цена', q => `<span class="disp" style="font-size:20px;font-weight:800">${byn(q.total)}</span>${q.total === best ? ' <span class="tag" style="background:#D3F5EA;color:var(--mint-t)">дешевле всех</span>' : ''}`], ['Срок', q => `${q.weeks} недель${q.weeks === fast ? ' <span class="tag" style="background:#E6E0FF">быстрее всех</span>' : ''}`], ['Старт', q => q.start], ['Гарантия', q => q.warranty], ['Материалы', q => q.materials], ['Оплата', q => q.pay], ['Рейтинг', q => `★ ${rating(pro(q.pro).rating)} · ${pro(q.pro).reviews} отзывов`], ['Ответ', q => respTxt(pro(q.pro).resp)]];
+  return `
+  <section style="overflow:hidden;border-bottom:2px solid var(--ink)">${blobs('#6C4BFF', '#FFC93C')}
+    <div class="wrap rise" style="position:relative;padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;gap:20px;align-items:center">
+      ${avImg('me', 64, 'Мария')}
+      <div style="flex:1 1 300px"><div class="muted" style="font-size:14px;font-weight:700">Заявка №2481 · Санузел 4,5 м² · Каменная Горка</div><h1 class="disp" style="margin-top:8px;font-size:clamp(28px,4vw,40px);font-weight:800">3 сметы — сравните и выберите</h1></div>
+      <span class="tag" style="background:#fff;border:2px solid var(--ink);font-size:14px">Ещё 2 бригады думают</span>
+    </div>
+  </section>
+  <div class="wrap" style="padding-top:28px">
+    <div class="card scroll-x" style="border-radius:30px">
+      <table class="t" style="min-width:760px">
+        <thead><tr><th style="width:150px"></th>${QUOTES.map(q => { const p = pro(q.pro); return `<th style="background:${q.best ? '#FFF0C2' : '#fff'};position:relative;padding-top:22px">${q.best ? '<span class="tag" style="position:absolute;top:-2px;left:14px;background:var(--orange);border:2px solid var(--ink);color:var(--ink)">Лучшее соотношение</span>' : ''}<a href="#/pro/${p.id}" style="display:flex;gap:10px;align-items:center;color:var(--ink);margin-top:10px">${avImg(p.av, 46)}<span><span style="font-size:16px;display:block">${p.name}</span><span class="muted" style="font-size:12px">${p.owner}</span></span></a></th>`; }).join('')}</tr></thead>
+        <tbody>${rowsDef.map(r => `<tr><th>${r[0]}</th>${QUOTES.map(q => `<td style="font-weight:700;background:${q.best ? '#FFF8E0' : 'transparent'}">${r[1](q)}</td>`).join('')}</tr>`).join('')}
+        <tr><th></th>${QUOTES.map(q => `<td style="background:${q.best ? '#FFF8E0' : 'transparent'}"><div style="display:flex;flex-direction:column;gap:8px"><button class="btn sm o" data-act="choose" data-v="${q.pro}">Выбрать</button><button class="btn sm" data-act="toast" data-v="Вопрос отправлен бригаде «${pro(q.pro).name}»">Задать вопрос</button></div></td>`).join('')}</tr></tbody>
+      </table>
+    </div>
+    <p class="muted" style="font-size:14px;font-weight:600;margin-top:14px">Остальные бригады получат вежливый отказ автоматически, когда вы выберете смету.</p>
+  </div>`;
+}
+
+/* ---------- Проект ---------- */
+const ST = { accepted: ['Принят', '#D3F5EA', 'var(--mint-t)'], submitted: ['Ждёт вашей приёмки', '#FFE0D1', 'var(--orange-t)'], in_progress: ['В работе', '#E6E0FF', 'var(--violet)'], planned: ['Запланирован', '#F1EADF', 'var(--muted)'], remarks: ['Есть замечание', '#FFE0E8', '#B0234F'] };
+function project() {
+  const p = pro(STATE.chosen) || PROS[0];
+  const S = STATE.project;
+  const total = S.reduce((a, s) => a + s.sum, 0), done = S.filter(s => s.st === 'accepted').reduce((a, s) => a + s.sum, 0);
+  const allDone = S.every(s => s.st === 'accepted');
+  return `
+  <section style="overflow:hidden;border-bottom:2px solid var(--ink);background:#D3F5EA">${blobs('#19C39B', '#BFE3FF')}
+    <div class="wrap rise" style="position:relative;padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;gap:24px;align-items:center">
+      <div style="flex:1 1 360px"><div class="muted" style="font-size:14px;font-weight:700">Договор №П-2481 от 14.11.2026 · Санузел 4,5 м²</div><h1 class="disp" style="margin-top:8px;font-size:clamp(28px,4vw,40px);font-weight:800">Мой ремонт</h1>
+        <div style="margin-top:16px;display:flex;align-items:center;gap:12px">${avImg(p.av, 48)}<div><b>${p.name}</b><div class="muted" style="font-size:13px;font-weight:600">${p.owner}, ${p.role}</div></div></div></div>
+      <div class="card" style="flex:0 1 340px;padding:20px">
+        <div style="display:flex;justify-content:space-between;font-weight:800"><span>Принято</span><span>${byn(done)} из ${byn(total)}</span></div>
+        <div style="margin-top:10px;height:14px;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:#fff"><div style="height:100%;background:var(--mint);width:${Math.round(done / total * 100)}%;transition:width .6s"></div></div>
+        <div class="muted" style="margin-top:8px;font-size:13px;font-weight:600">Сдача по договору — 21.12.2026</div>
+      </div>
+    </div>
+  </section>
+  <div class="wrap row" style="padding-top:28px">
+    <main style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+      ${S.map((s, i) => { const t = ST[s.st]; return `
+      <div class="card" style="padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;${s.st === 'submitted' ? 'box-shadow:6px 6px 0 var(--orange);border-color:var(--ink)' : ''}">
+        <div class="disp" style="flex:0 0 48px;height:48px;border-radius:16px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:800;background:${t[1]}">${s.st === 'accepted' ? '✓' : i + 1}</div>
+        <div style="flex:1 1 240px"><div style="font-weight:800;font-size:17px">${s.t}</div><div class="muted" style="font-size:14px;font-weight:600;margin-top:2px">${byn(s.sum)} · до ${s.due}</div>${s.note ? `<div style="margin-top:8px;font-size:14px;font-weight:600">📎 ${s.note}</div>` : ''}</div>
+        <span class="tag" style="background:${t[1]};color:${t[2]}">${t[0]}</span>
+        ${s.st === 'submitted' ? `<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm o" data-act="accept" data-v="${i}">Принять этап</button><button class="btn sm" data-act="remark" data-v="${i}">Замечание</button></div>` : ''}
+        ${s.st === 'remarks' ? `<button class="btn sm" data-act="fixed" data-v="${i}">Демо: бригада исправила</button>` : ''}
+      </div>`; }).join('')}
+      ${!allDone && !S.some(s => s.st === 'submitted' || s.st === 'remarks') ? `<button class="btn s" data-act="advance" style="align-self:flex-start">Демо: бригада сдала следующий этап</button>` : ''}
+      ${allDone ? `<div style="background:var(--yellow);border:2px solid var(--ink);border-radius:28px;box-shadow:6px 6px 0 var(--ink);padding:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center"><div class="disp" style="flex:1 1 260px;font-size:22px;font-weight:800">${STATE.reviewed ? 'Спасибо за отзыв!' : 'Ремонт принят. Оцените бригаду'}</div>${STATE.reviewed ? `<a href="#/pro/${p.id}" class="btn">Открыть профиль</a>` : `<button class="btn o" data-act="review">Оставить отзыв</button>`}</div>` : ''}
+    </main>
+    <aside class="side">
+      <div class="card" style="padding:20px"><div class="disp" style="font-size:16px;font-weight:700">Фотоотчёт за сегодня</div><div class="grid2" style="margin-top:12px;gap:8px"><img src="${IMG.pb}" alt="" style="width:100%;height:96px;object-fit:cover;border:2px solid var(--ink);border-radius:12px"><img src="${IMG.plumbing}" alt="" style="width:100%;height:96px;object-fit:contain;background:#D6ECFF;border:2px solid var(--ink);border-radius:12px"></div><div class="muted" style="margin-top:10px;font-size:14px;font-weight:600;line-height:1.5">${p.owner}: «Развели воду под инсталляцию, опрессовка прошла».</div></div>
+      <div class="card" style="padding:20px;display:flex;gap:12px;align-items:center">${avImg(p.av, 44)}<div style="flex:1"><b>Чат с бригадой</b><div class="muted" style="font-size:13px;font-weight:600">2 новых сообщения</div></div><button class="btn sm" data-act="toast" data-v="Чат в прототипе не подключён">Открыть</button></div>
+    </aside>
+  </div>`;
+}
+function reviewModal(n) {
+  const p = pro(STATE.chosen) || PROS[0];
+  openModal(`<div style="display:flex;gap:12px;align-items:center">${avImg(p.av, 52)}<div><div class="disp" style="font-size:22px;font-weight:800">Отзыв о «${p.name}»</div><div class="muted" style="font-size:14px;font-weight:600">Отзыв получит метку «Проект подтверждён»</div></div></div>
+    <div class="stars" style="margin-top:18px">${[1, 2, 3, 4, 5].map(i => `<button data-act="star" data-v="${i}" class="${i <= n ? 'on' : ''}" aria-label="${i} из 5">★</button>`).join('')}</div>
+    <label class="field" style="margin-top:12px">Что понравилось или нет<textarea rows="4">Сделали санузел за 5 недель, как в смете. Каждый этап — с фото и актом.</textarea></label>
+    <div style="margin-top:18px;display:flex;gap:10px;justify-content:flex-end"><button class="btn" data-act="close">Отмена</button><button class="btn o" data-act="sendReview">Опубликовать</button></div>`);
+}
+
+/* ---------- Кабинет подрядчика ---------- */
+const LST = { new: ['Новая', '#FFE0D1'], quoted: ['Смета отправлена', '#D3F5EA'], info: ['Ждём ответа клиента', '#E6E0FF'], declined: ['Отказ', '#F1EADF'] };
+function cabinet() {
+  const me = PROS[0];
+  const L = STATE.leads, cur = L.find(l => l.id === STATE.lead) || L[0];
+  const nNew = L.filter(l => l.status === 'new').length;
+  return `
+  <div style="display:flex;flex-wrap:wrap;min-height:calc(100vh - 110px)">
+    <aside class="hide-m" style="position:relative;flex:0 0 250px;background:var(--ink);color:#C9C3DD;overflow:hidden;padding:24px 18px;display:flex;flex-direction:column;gap:6px">
+      <div class="dots" style="background-image:radial-gradient(rgba(255,255,255,.16) 1.5px,transparent 1.6px)"></div>
+      <div class="blob" style="width:240px;height:240px;background:#6C4BFF;left:-100px;bottom:60px"></div>
+      <div style="position:relative;display:flex;gap:10px;align-items:center;padding:6px 6px 18px">${avImg(me.av, 44)}<div><div style="color:var(--cream);font-weight:800">${me.name}</div><div style="font-size:12px;color:var(--mint)">✓ Проверенный подрядчик</div></div></div>
+      ${[['Заявки', true, nNew], ['Проекты'], ['Профиль', false, 0, '#/pro/maystar'], ['Портфолио'], ['Продвижение'], ['Аналитика']].map(n => `<a href="${n[3] || '#/cabinet'}" ${n[3] || n[1] ? '' : `data-act="toast" data-v="Раздел «${n[0]}» в прототипе не нарисован"`} style="position:relative;padding:12px 14px;border-radius:14px;font-weight:700;display:flex;justify-content:space-between;${n[1] ? 'background:var(--orange);color:var(--ink)' : ''}">${n[0]}${n[2] ? `<span style="background:var(--ink);color:var(--cream);border-radius:999px;padding:0 8px;font-size:13px">${n[2]}</span>` : ''}</a>`).join('')}
+    </aside>
+    <div style="flex:1 1 600px;min-width:0;padding:28px clamp(16px,3vw,36px)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px"><h1 class="disp" style="font-size:32px;font-weight:800">Заявки</h1><span class="muted" style="font-weight:700">Вы вошли как ${me.owner}</span></div>
+      <div class="grid4" style="margin-top:20px;gap:12px">
+        ${[['Скорость ответа', '20 мин', 92, '#FFC93C'], ['Отвечаете на', '98%', 98, '#D3F5EA'], ['Новых заявок', String(nNew), nNew * 25, '#FFE0D1'], ['Выиграно за месяц', '7 из 31', 23, '#E6E0FF']].map(k => `<div style="background:${k[3]};border:2px solid var(--ink);border-radius:22px;padding:16px 18px"><div style="font-size:13px;font-weight:800">${k[0]}</div><div class="disp" style="margin-top:6px;font-size:24px;font-weight:800">${k[1]}</div><div style="margin-top:8px;height:8px;border-radius:4px;background:rgba(23,19,43,.12);overflow:hidden"><div class="bar" style="height:8px;background:var(--ink);width:${k[2]}%"></div></div></div>`).join('')}
+      </div>
+      <div class="row" style="margin-top:22px;gap:20px">
+        <div style="flex:0 1 360px;width:100%;display:flex;flex-direction:column;gap:10px">
+          ${L.map(l => `<button data-act="lead" data-v="${l.id}" class="pop" style="cursor:pointer;text-align:left;display:flex;gap:12px;align-items:center;padding:12px;border:2px solid var(--ink);border-radius:20px;background:${l.id === cur.id ? '#FFF0C2' : '#fff'}">
+            ${avImg(l.av, 52, l.client)}
+            <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:800" class="muted"><span>${l.type}</span><span>${l.when}</span></div>
+            <div style="margin-top:2px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px">${l.title}${l.status === 'new' ? '<span class="ping" style="background:var(--orange)"></span>' : ''}</div>
+            <div style="margin-top:4px;display:flex;gap:6px;align-items:center;font-size:12px;font-weight:700"><span class="muted">${l.where}</span><span class="tag" style="padding:2px 8px;background:${LST[l.status][1]}">${LST[l.status][0]}</span></div></div></button>`).join('')}
+        </div>
+        <div class="card" style="flex:1;min-width:0;border-width:3px;border-radius:30px;box-shadow:8px 8px 0 var(--ink);padding:24px">
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">${avImg(cur.av, 56, cur.client)}<div style="flex:1"><div class="muted" style="font-size:13px;font-weight:800">${cur.type} · ${cur.when} назад · ${cur.client}</div><h2 class="disp" style="margin-top:4px;font-size:22px;font-weight:800;line-height:1.2">${cur.title}</h2></div><span class="tag" style="background:${LST[cur.status][1]}">${LST[cur.status][0]}</span></div>
+          <div class="grid3" style="margin-top:16px;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">${[['Бюджет', cur.budget, '#FFE0D1'], ['Старт', cur.start, '#D3F5EA'], ['Район', 'Минск, ' + cur.where, '#D6ECFF'], ['Объект', cur.obj, '#FFF4E8'], ['Помещения', cur.parts, '#E6E0FF']].map(f => `<div style="padding:10px 12px;border-radius:14px;background:${f[2]}"><div class="muted" style="font-size:11px;font-weight:800">${f[0]}</div><div style="font-weight:800;font-size:15px;margin-top:2px">${f[1]}</div></div>`).join('')}</div>
+          <p style="margin:16px 0 0;padding:14px 16px;border-radius:16px;background:var(--cream);font-size:15px;line-height:1.6">«${cur.text}»</p>
+          <div style="margin-top:14px;display:flex;gap:10px"><img src="${IMG[cur.img]}" alt="Фото от клиента" style="width:130px;height:92px;object-fit:cover;border:2px solid var(--ink);border-radius:14px"><img src="${IMG.pl}" alt="Фото от клиента" style="width:130px;height:92px;object-fit:cover;border:2px solid var(--ink);border-radius:14px"></div>
+          <div class="disp" style="margin-top:22px;font-size:15px;font-weight:700">Ваш ответ</div>
+          ${cur.status === 'new' ? `<div style="margin-top:10px;display:flex;flex-direction:column;gap:10px"><button class="btn o" data-act="smeta">Отправить смету и сроки</button><div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn s" style="flex:1" data-act="info">Нужны подробности</button><button class="btn" style="flex:1" data-act="decline">Не смогу взяться</button></div></div>
+            <div class="muted" style="margin-top:12px;font-size:13px;font-weight:600">Ответьте в течение суток, чтобы рейтинг ответов оставался высоким.</div>` : `<div style="margin-top:10px;padding:14px 16px;border-radius:16px;background:${LST[cur.status][1]};font-weight:700">${cur.status === 'quoted' ? 'Смета отправлена. Клиент сравнит её с другими и ответит в чате.' : cur.status === 'info' ? 'Вопрос отправлен в чат. Заявка вернётся в «Новые», когда клиент ответит.' : 'Заявка закрыта для вас, клиент получил вежливый отказ.'}</div><button class="btn sm" style="margin-top:12px" data-act="resetLead">Демо: вернуть в «Новые»</button>`}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+const SMETA = [['Демонтаж плитки и сантехники, вывоз', 'компл', 1, 2400], ['Электрика и сантехника, черновая', 'компл', 1, 3100], ['Гидроизоляция и укладка плитки', 'м²', 28, 150], ['Установка сантехники и уборка', 'компл', 1, 2700]];
+function smetaModal() {
+  const rows = SMETA.map((r, i) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td><input data-sm="q${i}" value="${r[2]}" inputmode="decimal" style="width:64px;padding:6px 8px;border:2px solid var(--ink);border-radius:10px;font-weight:700"></td><td><input data-sm="p${i}" value="${r[3]}" inputmode="decimal" style="width:84px;padding:6px 8px;border:2px solid var(--ink);border-radius:10px;font-weight:700"></td></tr>`).join('');
+  openModal(`<div class="disp" style="font-size:22px;font-weight:800">Смета: ${STATE.leads.find(l => l.id === STATE.lead).title}</div><div class="muted" style="font-size:14px;font-weight:600;margin-top:4px">Этапы станут этапами проекта и приёмки</div>
+    <div class="scroll-x" style="margin-top:16px"><table class="t" style="min-width:520px;background:#fff;border:2px solid var(--ink);border-radius:18px;border-collapse:separate;border-spacing:0;overflow:hidden"><thead><tr><th>Этап</th><th>Ед.</th><th>Кол-во</th><th>Цена, BYN</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px"><span class="chip">Срок: 5 недель</span><span class="chip">Гарантия: 2 года</span><span class="chip">Черновые материалы включены</span></div>
+    <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><div class="disp" style="font-size:24px;font-weight:800">Итого: <span id="smTotal"></span></div><div style="display:flex;gap:10px"><button class="btn" data-act="close">Отмена</button><button class="btn o" data-act="sendSmeta">Отправить клиенту</button></div></div>`);
+  calcSmeta();
+}
+function calcSmeta() {
+  let t = 0;
+  SMETA.forEach((r, i) => { const q = parseFloat((document.querySelector(`[data-sm=q${i}]`) || {}).value?.replace(',', '.')) || 0, p = parseFloat((document.querySelector(`[data-sm=p${i}]`) || {}).value?.replace(',', '.')) || 0; t += q * p; });
+  const el = document.getElementById('smTotal'); if (el) el.textContent = byn(Math.round(t));
+}
+
+/* ---------- Роутер и действия ---------- */
+let current = () => '';
+function render(keepScroll) {
+  app.innerHTML = current();
+  if (!keepScroll) window.scrollTo(0, 0);
+  const path = location.hash.split('?')[0];
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('cur', path.startsWith(a.getAttribute('href'))));
+}
+function route() {
+  const [path, qs] = location.hash.slice(1).split('?');
+  const p = (path || '/').split('/').filter(Boolean), q = new URLSearchParams(qs || '');
+  closeModal();
+  if (!p.length) current = home;
+  else if (p[0] === 'search') current = () => search(q);
+  else if (p[0] === 'pro') current = () => profile(p[1]);
+  else if (p[0] === 'request') { wizard(p[1] || ''); current = () => wizard(); }
+  else if (p[0] === 'compare') current = compare;
+  else if (p[0] === 'project') current = project;
+  else if (p[0] === 'cabinet') current = cabinet;
+  else current = home;
+  render(false);
+  document.title = 'Подряд — кликабельный прототип';
+}
+let reviewStars = 5;
+const ACTS = {
+  cat: v => { location.hash = '#/search?cat=' + v; },
+  sort: v => { STATE.search.sort = v; render(true); },
+  fast: () => { STATE.search.fast = !STATE.search.fast; render(true); },
+  wtype: v => { STATE.wiz.type = v; render(true); },
+  wpart: v => { STATE.wiz.parts[v] = !STATE.wiz.parts[v]; render(true); },
+  wbudget: v => { STATE.wiz.budget = v; render(true); },
+  wtiming: v => { STATE.wiz.timing = v; render(true); },
+  wnext: () => { if (STATE.wiz.step === 2 && !Object.values(STATE.wiz.parts).some(Boolean)) return toast('Выберите хотя бы одно помещение'); STATE.wiz.step++; render(true); },
+  wback: () => { STATE.wiz.step = Math.max(1, STATE.wiz.step - 1); render(true); },
+  wrestart: () => { STATE.wiz.step = 1; render(true); },
+  choose: v => { STATE.chosen = v; STATE.reviewed = false; toast(`Вы выбрали «${pro(v).name}». Остальным бригадам ушёл вежливый отказ`); location.hash = '#/project'; },
+  accept: v => { STATE.project[v].st = 'accepted'; const n = STATE.project[+v + 1]; if (n && n.st === 'planned') n.st = 'in_progress'; toast(`Этап принят: ${byn(STATE.project[v].sum)} к оплате бригаде`); render(true); },
+  remark: v => { STATE.project[v].st = 'remarks'; toast('Замечание отправлено, бригада получила уведомление'); render(true); },
+  fixed: v => { STATE.project[v].st = 'submitted'; STATE.project[v].note = 'Замечание исправлено, новые фото приложены'; render(true); },
+  advance: () => { const n = STATE.project.find(s => s.st === 'in_progress' || s.st === 'planned'); if (n) { n.st = 'submitted'; n.note = 'Этап готов, фото и акт приложены'; } render(true); },
+  review: () => { reviewStars = 5; reviewModal(5); },
+  star: v => { reviewStars = +v; reviewModal(reviewStars); },
+  sendReview: () => { STATE.reviewed = true; closeModal(); toast(`Спасибо! Отзыв ${'★'.repeat(reviewStars)} опубликован`); render(true); },
+  lead: v => { STATE.lead = v; render(true); },
+  smeta: () => smetaModal(),
+  sendSmeta: () => { STATE.leads.find(l => l.id === STATE.lead).status = 'quoted'; closeModal(); toast('Смета отправлена клиенту'); render(true); },
+  info: () => { STATE.leads.find(l => l.id === STATE.lead).status = 'info'; toast('Вопрос отправлен клиенту в чат'); render(true); },
+  decline: () => { STATE.leads.find(l => l.id === STATE.lead).status = 'declined'; toast('Заявка закрыта, клиент получил вежливый отказ'); render(true); },
+  resetLead: () => { STATE.leads.find(l => l.id === STATE.lead).status = 'new'; render(true); },
+  toast: v => toast(v),
+  close: () => closeModal(),
+  closeBg: (v, el, e) => { if (e.target === el) closeModal(); }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const fn = ACTS[el.dataset.act];
+  if (!fn) return;
+  if (el.tagName === 'A' || el.tagName === 'BUTTON') e.preventDefault();
+  fn(el.dataset.v, el, e);
+});
+document.addEventListener('input', e => { if (e.target.dataset.sm) calcSmeta(); });
+document.addEventListener('submit', e => {
+  if (e.target.dataset.form !== 'search') return;
+  e.preventDefault();
+  const q = (new FormData(e.target).get('q') || '').toLowerCase();
+  const map = [['ван', 'bath'], ['санузел', 'bath'], ['крыш', 'roof'], ['кровл', 'roof'], ['фундамент', 'found'], ['электр', 'elec'], ['провод', 'elec'], ['сантех', 'plumb'], ['окн', 'win'], ['двер', 'win'], ['покрас', 'paint'], ['отдел', 'paint']];
+  const hit = map.find(m => q.includes(m[0]));
+  location.hash = '#/search?cat=' + (hit ? hit[1] : 'remont');
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
