@@ -19,6 +19,13 @@ body[data-theme=prod]{--bg:#F6F7F9;--surface:#fff;--soft:#F1F5F9;--soft2:#E8EEF5
 /* ---------- база ---------- */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+html,body{overflow-x:clip}
+.show-m,.show-mb{display:none}
+.burger{width:42px;height:42px;border:var(--bw) solid var(--btn-edge);border-radius:var(--r-btn);background:var(--surface);align-items:center;justify-content:center;cursor:pointer;font-size:20px}
+.mnav a{display:flex;justify-content:space-between;padding:15px 4px;border-bottom:1px solid var(--line);font-weight:700;font-size:18px}
+.qcard{padding:16px;display:flex;flex-direction:column;gap:10px}
+.qrow{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.themes .sh{display:none}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-b);-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
@@ -165,7 +172,8 @@ table.t th{font-size:13px;color:var(--mut);font-weight:700}
 .dlabel{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:700;color:var(--mut);letter-spacing:.04em;text-transform:uppercase;pointer-events:none}
 /* модалки, тосты */
 .toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(200%);background:var(--ink);color:var(--bg);border-radius:var(--r);padding:13px 20px;font-weight:700;transition:transform .35s cubic-bezier(.2,1.3,.4,1);z-index:60;max-width:92vw;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{opacity:0;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 .modal-bg{position:fixed;inset:0;background:rgba(15,15,25,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50;animation:fade .2s}
 @keyframes fade{from{opacity:0}}
 .modal{background:var(--bg);border:var(--bw) solid var(--edge);border-radius:var(--r-lg);width:min(720px,100%);max-height:90vh;overflow:auto;padding:26px;animation:rise .35s both}
@@ -257,16 +265,45 @@ body[data-theme=prod] .sticker{border-radius:16px;border:1px solid var(--line)}
   .hero-art{flex:auto;height:380px}
   body[data-theme=yelp] .hero-art{height:auto}
 }
+@media (max-width:1000px){
+  .show-m{display:inline-flex}
+  .show-mb{display:block}
+  .map{min-height:340px}
+  .cimg{flex-basis:100%!important}
+  .cimg .ph{min-height:180px!important;height:180px!important}
+}
 @media (max-width:600px){
   .wrap{padding:0 16px}
+  .sec{padding-top:64px}
+  .hero-in{padding-top:32px;padding-bottom:48px;gap:28px}
+  .hero-art{height:300px}
+  .sticker{transform:scale(.85);transform-origin:left top}
+  .sticker.float{left:8px!important;top:40px!important}
+  .sticker.float2{right:8px!important;bottom:16px!important;transform-origin:right bottom}
+  .stats{gap:20px}
+  .sctl .cap{display:none}
+  body[data-theme=yelp] .sctl{bottom:12px;right:12px}
+  .stats .n{font-size:22px}
+  body[data-theme=eng] .stats>div{padding:12px 10px}
+  .gal{grid-template-columns:1fr 1fr!important}
+  .gal .ph{height:120px!important}
+  .sph{flex-basis:100%!important}
+  .sph .ph{height:150px!important}
+  .cta{padding:22px}
+  .modal{border-radius:var(--r) var(--r) 0 0;align-self:flex-end;max-height:86vh}
+  .modal-bg{padding:0;align-items:flex-end}
+  header.top .wrap{height:62px}
+  .right .btn.p{padding:8px 12px;font-size:13px}
   .grid2{grid-template-columns:1fr}
   .search{flex-direction:column}
   .search .sep{display:none}
   body[data-theme=yelp] .search .btn{margin:0;border-radius:6px}
   .right .ghost{display:none}
   .themes .l{display:none}
-  .themes button{padding:8px 10px;font-size:12px}
-  .themes button span{display:none}
+  .themes{bottom:10px;max-width:calc(100vw - 16px)}
+  .themes button{padding:8px 10px;font-size:12px;gap:5px}
+  .themes .lg{display:none}
+  .themes .sh{display:inline}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
@@ -285,6 +322,7 @@ body[data-theme=prod] .sticker{border-radius:16px;border:1px solid var(--line)}
     <div class="right">
       <a href="#/join" class="btn sm ghost">Я подрядчик</a>
       <a href="#/request" class="btn sm p">Разместить заявку</a>
+      <button class="burger show-m" data-act="menu" aria-label="Меню">☰</button>
     </div>
   </div>
 </header>
@@ -305,10 +343,10 @@ body[data-theme=prod] .sticker{border-radius:16px;border:1px solid var(--line)}
 </footer>
 <div class="themes" role="group" aria-label="Стиль оформления">
   <span class="l">Стиль</span>
-  <button data-theme="yelp"><i style="background:#E0262A"></i><span>В духе Yelp</span></button>
-  <button data-theme="juicy"><i style="background:#FF5A1F"></i><span>Сочный</span></button>
-  <button data-theme="eng"><i style="background:#111214;outline:1px solid #FF4F00"></i><span>Инженерный</span></button>
-  <button data-theme="prod"><i style="background:#2563EB"></i><span>Продуктовый</span></button>
+  <button data-theme="yelp"><i style="background:#E0262A"></i><span class="lg">В духе Yelp</span><span class="sh">Yelp</span></button>
+  <button data-theme="juicy"><i style="background:#FF5A1F"></i><span class="lg">Сочный</span><span class="sh">Сочный</span></button>
+  <button data-theme="eng"><i style="background:#111214;outline:1px solid #FF4F00"></i><span class="lg">Инженерный</span><span class="sh">Инж.</span></button>
+  <button data-theme="prod"><i style="background:#2563EB"></i><span class="lg">Продуктовый</span><span class="sh">Прод.</span></button>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div id="modal"></div>
@@ -508,10 +546,11 @@ function search(q) {
   return pageHead(`<a href="#/">Главная</a> / ${cat.name} / Минск`, `${cat.name} в Минске`, `<div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:8px">${CATS.map(c => `<button class="chip ${c.id === cat.id ? 'on' : ''}" data-act="cat" data-v="${c.id}">${c.name}</button>`).join('')}</div>`) + `
   <div class="wrap row" style="padding-top:26px">
     <main style="flex:1;min-width:0;display:flex;flex-direction:column;gap:16px">
-      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px"><span class="mut" style="font-weight:600">${list.length} в прототипе · сортировка:</span>${[['rec', 'Рекомендуемые'], ['rating', 'Рейтинг'], ['price', 'Цена'], ['resp', 'Быстрый ответ']].map(s => `<button class="chip ${S.sort === s[0] ? 'on' : ''}" data-act="sort" data-v="${s[0]}">${s[1]}</button>`).join('')}<button class="chip ${S.fast ? 'on' : ''}" data-act="fast" style="margin-left:auto">⚡ Отвечают за час</button></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px"><span class="mut" style="font-weight:600">${list.length} в прототипе · сортировка:</span>${[['rec', 'Рекомендуемые'], ['rating', 'Рейтинг'], ['price', 'Цена'], ['resp', 'Быстрый ответ']].map(s => `<button class="chip ${S.sort === s[0] ? 'on' : ''}" data-act="sort" data-v="${s[0]}">${s[1]}</button>`).join('')}<button class="chip ${S.fast ? 'on' : ''}" data-act="fast" style="margin-left:auto">⚡ Отвечают за час</button><button class="chip show-m ${S.map ? 'on' : ''}" data-act="maptog">🗺 ${S.map ? 'Скрыть карту' : 'Карта'}</button></div>
+      ${S.map ? `<div class="card show-mb" style="height:360px;padding:0">${mapView(list)}</div>` : ''}
       ${list.length ? list.map((p, i) => `
       <article class="card pop rise" data-hover="${p.id}" style="display:flex;flex-wrap:wrap;animation-delay:${i * .05}s">
-        <a href="#/pro/${p.id}" style="flex:0 0 220px;max-width:100%">${photo(p.portfolio[0][0], '100%;min-height:200px', p.portfolio[0][1])}</a>
+        <a href="#/pro/${p.id}" class="cimg" style="flex:0 0 220px;max-width:100%">${photo(p.portfolio[0][0], '100%;min-height:200px', p.portfolio[0][1])}</a>
         <div style="flex:1;min-width:260px;padding:18px 20px">
           <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px">
             <div style="display:flex;gap:12px;align-items:center">${avl(p, 46)}<div><a href="#/pro/${p.id}" class="d" style="font-size:19px">${i + 1}. ${p.name}</a><div class="mut" style="font-size:13px">${p.owner} · ${p.district}</div></div></div>
@@ -537,7 +576,7 @@ function profile(id) {
   return `
   <section class="hero phead" style="border-bottom:var(--bw) solid var(--edge)">${deco()}
     <div class="wrap" style="position:relative;padding-top:20px"><a href="#/search" style="font-size:14px;font-weight:700">← Назад к поиску</a>
-      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-top:14px;border-radius:var(--r);overflow:hidden">${gal.map((g, i) => photo(g, i ? '170px' : '170px', p.name)).join('')}</div>
+      <div class="gal" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-top:14px;border-radius:var(--r);overflow:hidden">${gal.map((g, i) => photo(g, i ? '170px' : '170px', p.name)).join('')}</div>
       <div class="rise" style="display:flex;flex-wrap:wrap;gap:24px;align-items:center;padding:26px 0 34px">
         ${avl(p, 110)}
         <div style="flex:1 1 380px;min-width:0">
@@ -608,7 +647,9 @@ function compare() {
   const rows = [['Цена', q => `<span class="d n" style="font-size:20px">${byn(q.total)}</span>${q.total === best ? ' <span class="tag ok">дешевле всех</span>' : ''}`], ['Срок', q => `${q.weeks} недель${q.weeks === fast ? ' <span class="tag">быстрее всех</span>' : ''}`], ['Старт', q => q.start], ['Гарантия', q => q.warranty], ['Материалы', q => q.materials], ['Оплата', q => q.pay], ['Рейтинг', q => rating(pro(q.pro).rating, pro(q.pro).reviews)], ['Ответ', q => respTxt(pro(q.pro).resp)]];
   return pageHead('Заявка №2481 · Санузел 4,5 м² · Каменная Горка', '3 сметы — сравните и выберите', `<div style="margin-top:12px" class="mut">Ещё 2 бригады думают · ответ обычно в течение суток</div>`) + `
   <div class="wrap" style="padding-top:26px">
-    <div class="card scroll-x"><table class="t" style="min-width:780px">
+    <div class="show-mb" style="display:none"></div>
+    <div class="qcards show-mb">${QUOTES.map(q => { const p = pro(q.pro); return `<div class="card qcard ${q.best ? 'best' : ''}" style="margin-bottom:12px">${q.best ? '<span class="tag acc" style="align-self:flex-start">Лучшее соотношение</span>' : ''}<a href="#/pro/${p.id}" style="display:flex;gap:10px;align-items:center">${avl(p, 42)}<span><b>${p.name}</b><br><span class="mut" style="font-size:12px">${p.owner}</span></span></a><div class="d n" style="font-size:24px">${byn(q.total)}</div>${rows.slice(1, 7).map(r => `<div class="qrow"><span class="mut">${r[0]}</span><span style="text-align:right;font-weight:600">${r[1](q)}</span></div>`).join('')}<div style="display:flex;gap:8px"><button class="btn sm ${q.best ? 'p' : ''}" style="flex:1" data-act="choose" data-v="${q.pro}">Выбрать</button><button class="btn sm" style="flex:1" data-act="toast" data-v="Вопрос отправлен бригаде «${p.name}»">Вопрос</button></div></div>`; }).join('')}</div>
+    <div class="card scroll-x hide-m"><table class="t" style="min-width:780px">
       <thead><tr><th style="width:140px"></th>${QUOTES.map(q => { const p = pro(q.pro); return `<th class="${q.best ? 'best' : ''}" style="padding-top:16px">${q.best ? '<span class="tag acc" style="margin-bottom:8px">Лучшее соотношение</span>' : ''}<a href="#/pro/${p.id}" style="display:flex;gap:10px;align-items:center;color:var(--ink);margin-top:6px">${avl(p, 42)}<span><span style="font-size:15px;display:block">${p.name}</span><span class="mut" style="font-size:12px;font-weight:500">${p.owner}</span></span></a></th>`; }).join('')}</tr></thead>
       <tbody>${rows.map(r => `<tr><th>${r[0]}</th>${QUOTES.map(q => `<td class="${q.best ? 'best' : ''}" style="font-weight:600">${r[1](q)}</td>`).join('')}</tr>`).join('')}
       <tr><th></th>${QUOTES.map(q => `<td class="${q.best ? 'best' : ''}"><div style="display:flex;flex-direction:column;gap:8px"><button class="btn sm ${q.best ? 'p' : ''}" data-act="choose" data-v="${q.pro}">Выбрать</button><button class="btn sm" data-act="toast" data-v="Вопрос отправлен бригаде «${pro(q.pro).name}»">Задать вопрос</button></div></td>`).join('')}</tr></tbody>
@@ -626,7 +667,7 @@ function project() {
   <div class="wrap row" style="padding-top:26px">
     <main style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
       ${S.map((s, i) => `<div class="card" style="display:flex;flex-wrap:wrap;align-items:stretch;${s.st === 'submitted' ? 'border-color:var(--acc);box-shadow:var(--sh-h)' : ''}">
-        <div style="flex:0 0 150px">${photo(s.ph, '100%;min-height:110px', s.t)}</div>
+        <div class="sph" style="flex:0 0 150px">${photo(s.ph, '100%;min-height:110px', s.t)}</div>
         <div style="flex:1 1 240px;padding:16px 18px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><div class="mut n" style="font-size:12px">ЭТАП ${i + 1}</div><div style="font-weight:800;font-size:17px;margin-top:2px">${s.t}</div><div class="mut" style="font-size:14px;margin-top:2px">${byn(s.sum)} · до ${s.due}</div></div><span class="tag ${ST[s.st][1]}" style="align-self:flex-start">${ST[s.st][0]}</span></div>
         ${s.note ? `<div style="margin-top:8px;font-size:14px">📎 ${s.note}</div>` : ''}
         ${s.st === 'submitted' ? `<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm p" data-act="accept" data-v="${i}">Принять этап</button><button class="btn sm" data-act="remark" data-v="${i}">Замечание</button></div>` : ''}
@@ -797,6 +838,8 @@ const ACTS = {
   ano: v => { const c = STATE.admin.companies.find(x => x.id === v); c.st = 'docs'; STATE.admin.log.unshift(`сейчас · вы · запросили документы у «${c.name}»`); toast('Запрос документов отправлен'); render(true); },
   rpub: v => { STATE.admin.reviews.find(x => x.id === v).st = 'pub'; render(true); },
   rhide: v => { const r = STATE.admin.reviews.find(x => x.id === v); r.st = 'hid'; STATE.admin.log.unshift(`сейчас · вы · скрыли отзыв ${r.who}: ${r.flag.toLowerCase()}`); toast('Отзыв скрыт, автор получил причину'); render(true); },
+  menu: () => openModal(`<div style="display:flex;justify-content:space-between;align-items:center"><div class="brand">Подряд</div><button class="burger" style="display:inline-flex" data-act="close" aria-label="Закрыть">✕</button></div><nav class="mnav" style="margin-top:10px">${[['#/', 'Главная'], ['#/search', 'Найти мастера'], ['#/request', 'Разместить заявку'], ['#/compare', 'Мои сметы'], ['#/project', 'Мой ремонт'], ['#/join', 'Стать подрядчиком'], ['#/cabinet', 'Кабинет подрядчика'], ['#/admin', 'Модерация (демо)'], ['#/sitemap', 'Карта сайта']].map(l => `<a href="${l[0]}">${l[1]}<span class="mut">→</span></a>`).join('')}</nav>`),
+  maptog: () => { STATE.search.map = !STATE.search.map; render(true); },
   toast: v => toast(v),
   close: () => closeModal(),
   closeBg: (v, el, e) => { if (e.target === el) closeModal(); }
